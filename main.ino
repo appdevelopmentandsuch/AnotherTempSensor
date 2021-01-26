@@ -1,9 +1,7 @@
 #include "DHT.h"
 #include "secrets.h"
 #include "server_config.h"
-#include <ArduinoJson.h>
 #include <ArduinoMqttClient.h>
-#include <ESP8266HTTPClient.h>
 #include <ESP8266WiFi.h>
 #include <string.h>
 
@@ -33,7 +31,9 @@ void setup() {
   
   dht.begin();
 
-  mqttClient.setUsernamePassword(mqttUser, mqttPass);
+  if(!(mqttUser == "" || mqttPass == "")) {
+    mqttClient.setUsernamePassword(mqttUser, mqttPass);
+  }
 
   if (!mqttClient.connect(broker, port)) {
     while (1);
