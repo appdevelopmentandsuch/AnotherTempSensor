@@ -5,15 +5,18 @@
 #include <ArduinoMqttClient.h>
 #include <ESP8266HTTPClient.h>
 #include <ESP8266WiFi.h>
+#include <string.h>
 
 char mqttPass[] = SECRET_MQTT_PASS;
 char mqttUser[] = SECRET_MQTT_USER;
 char pass[] = SECRET_PASS;
-char ssid[] = SECRET_SSID; 
+char ssid[] = SECRET_SSID;
+
+String deviceLocation = DEVICE_LOCATION;
 
 const char broker[] = MQTT_BROKER;
-const char humidityTopic[]  = "humidity/bath-room";
-const char tempTopic[]  = "temp/bath-room";
+const String humidityTopic  = "humidity";
+const String tempTopic  = "temp";
 int        port     = MQTT_PORT;
 
 DHT dht(DHTPIN, DHTTYPE);
@@ -37,6 +40,16 @@ void setup() {
   }
 }
 
+String buildTopic(String root) {
+  return root + "/" + deviceLocation;
+}
+
+void sendMqttMessage(String topic, String message) {
+    mqttClient.beginMessage(topic);
+    mqttClient.print(message);
+    mqttClient.endMessage();
+}
+
 void loop() {
  
   if (WiFi.status() == WL_CONNECTED) {
@@ -44,13 +57,8 @@ void loop() {
     float h = dht.readHumidity();
     float t = dht.readTemperature();
 
-    mqttClient.beginMessage(tempTopic);
-    mqttClient.print(t);
-    mqttClient.endMessage();
-
-    mqttClient.beginMessage(humidityTopic);
-    mqttClient.print(h);
-    mqttClient.endMessage();
+    sendMqttMessage(buildTopic(tempTopic), String(t));
+    sendMqttMessage(buildTopic(humidityTopic), String(h));
   }
 
  delay(LOOP_DELAY);
