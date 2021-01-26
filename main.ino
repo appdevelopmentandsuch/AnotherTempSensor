@@ -17,7 +17,7 @@ const String humidityTopic  = "humidity";
 const String tempTopic  = "temp";
 int        port     = MQTT_PORT;
 
-DHT dht(DHTPIN, DHTTYPE);
+DHT dht(DHT_PIN, DHT_TYPE);
 WiFiClient wifiClient;
 MqttClient mqttClient(wifiClient);
 
