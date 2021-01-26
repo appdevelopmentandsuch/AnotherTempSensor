@@ -51,9 +51,7 @@ void loop() {
     mqttClient.beginMessage(humidityTopic);
     mqttClient.print(h);
     mqttClient.endMessage();
- 
-  } else {
-    Serial.println("Error in WiFi connection");
   }
+
  delay(LOOP_DELAY);
 }
