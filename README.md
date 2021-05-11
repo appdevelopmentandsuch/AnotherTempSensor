@@ -1,5 +1,7 @@
 # AnotherTempSensor
 
+[![CodeFactor](https://www.codefactor.io/repository/github/appdevelopmentandsuch/anothertempsensor/badge)](https://www.codefactor.io/repository/github/appdevelopmentandsuch/anothertempsensor)
+
 Temperature / Humidity Logger using NodeMCU, DHT11, sending data using MQTT
 
 ## Sensors
