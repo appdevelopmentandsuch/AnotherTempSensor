@@ -31,8 +31,9 @@ void setup() {
 
   handleWifiSetup();
 
-  // handleMQTTSetup();
+  // Uncomment either handleMQTTSetup or handleServerSetup, depending on how you want your data.
   handleServerSetup();
+  // handleMQTTSetup();
 
   dht.begin();
 
@@ -40,6 +41,7 @@ void setup() {
 
 void loop() {
   if (WiFi.status() == WL_CONNECTED) {
+    // Uncomment server.handleClient if handleServerSetup was uncommented, or handleMQTT if handleMQTTSetup was uncommented
     server.handleClient();  
     // handleMQTT();
   }
