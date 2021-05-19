@@ -1,4 +1,3 @@
-#define DEVICE_LOCATION "";
 #define DHT_PIN D5
 #define DHT_TYPE DHT11
 #define LOOP_DELAY 5000

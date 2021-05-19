@@ -15,11 +15,9 @@ char ssid[] = SECRET_SSID;
 char server_user[] = SECRET_SERVER_USERNAME;
 char server_pass[] = SECRET_SERVER_PASSWORD;
 
-String deviceLocation = DEVICE_LOCATION;
-
 const char broker[] = MQTT_BROKER;
 const String humidityTopic  = "humidity";
-const String tempTopic  = "temp";
+const String tempTopic  = "temperature";
 int        port     = MQTT_PORT;
 
 DHT dht(DHT_PIN, DHT_TYPE);
@@ -100,7 +98,7 @@ void handleMQTTSetup() {
 }
 
 String buildTopic(String root) {
-  return root + "/" + deviceLocation;
+  return root + "/" + identifier;
 }
 
 void sendMqttMessage(String topic, String message) {
@@ -116,5 +114,5 @@ void handleMQTT() {
 
   sendMqttMessage(buildTopic(tempTopic), String(t));
   sendMqttMessage(buildTopic(humidityTopic), String(h));
-  // delay(LOOP_DELAY);
+  delay(LOOP_DELAY);
 }
