@@ -4,3 +4,4 @@
 #define MQTT_BROKER "";
 #define MQTT_PORT 1883
 #define SETUP_DELAY 500
+#define VERSION "0.0.0"
