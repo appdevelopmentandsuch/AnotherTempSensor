@@ -4,4 +4,4 @@
 #define LOOP_DELAY 5000
 #define MQTT_BROKER "";
 #define MQTT_PORT 1883
-#define WIFI_SETUP_DELAY 500
+#define SETUP_DELAY 500
