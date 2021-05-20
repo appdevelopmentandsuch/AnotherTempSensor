@@ -7,17 +7,17 @@ char pass[] = SECRET_PASS;
 char ssid[] = SECRET_SSID;
 
 // Wifi Connection Methods
+bool isConnected() {
+    return WiFi.status() == WL_CONNECTED;
+}
+
 void handleWifiSetup() {
   WiFi.begin(ssid, pass);
 
-  while (WiFi.status() != WL_CONNECTED) {
+  while (!isConnected()) {
     delay(SETUP_DELAY);
   }
 
   Serial.println("WiFi connected.");
   Serial.print("Got IP: ");  Serial.println(WiFi.localIP());
-}
-
-bool isConnected() {
-    return WiFi.status() == WL_CONNECTED;
 }
