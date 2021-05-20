@@ -1,4 +1,4 @@
 .vscode
 
-secrets.h
 server_config.h
+secrets.h
