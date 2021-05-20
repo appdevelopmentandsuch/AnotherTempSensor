@@ -19,6 +19,30 @@ const char broker[] = MQTT_BROKER;
 const String humidityTopic  = "humidity";
 const String tempTopic  = "temperature";
 int        port     = MQTT_PORT;
+uint8_t config = OPTION_REST;
+
+typedef struct { 
+  uint8_t config;
+  void (*func)(void);
+} configDictionary;
+
+// Setup methods
+void handleServerSetup();
+void handleMQTTSetup();
+
+// Run methods
+void handleServer();
+void handleMQTT();
+
+const configDictionary setupConfig[] {
+  {OPTION_REST, &handleServerSetup},
+  {OPTION_MQTT, &handleMQTTSetup},
+};
+
+const configDictionary runConfig[] {
+  {OPTION_REST, &handleServer},
+  {OPTION_MQTT, &handleMQTT},
+};
 
 DHT dht(DHT_PIN, DHT_TYPE);
 ESP8266WebServer server(80);
@@ -33,9 +57,7 @@ void setup() {
 
   handleWifiSetup();
 
-  // Uncomment either handleMQTTSetup or handleServerSetup, depending on how you want your data.
-  handleServerSetup();
-  // handleMQTTSetup();
+  setupConfig[config].func();
 
   dht.begin();
 
@@ -43,9 +65,7 @@ void setup() {
 
 void loop() {
   if (WiFi.status() == WL_CONNECTED) {
-    // Uncomment server.handleClient if handleServerSetup was uncommented, or handleMQTT if handleMQTTSetup was uncommented
-    server.handleClient();  
-    // handleMQTT();
+    runConfig[config].func();
   }
 }
 
@@ -64,6 +84,10 @@ void handleWifiSetup() {
 }
 
 // HTTP Server Methods
+void handleServer() {
+  server.handleClient();  
+}
+
 void handleServerSetup() {
   server.on("/api/read/all/", handleReadAll);
   server.on("/api/read/temperature/", handleReadTemperature);
