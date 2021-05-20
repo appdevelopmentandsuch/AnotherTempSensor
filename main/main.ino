@@ -19,7 +19,7 @@ const char broker[] = MQTT_BROKER;
 const String humidityTopic  = "humidity";
 const String tempTopic  = "temperature";
 int        port     = MQTT_PORT;
-uint8_t config = OPTION_SERVER;
+uint8_t config = OPTION_REST;
 
 typedef struct { 
   uint8_t config;
@@ -35,12 +35,12 @@ void handleServer();
 void handleMQTT();
 
 const configDictionary setupConfig[] {
-  {OPTION_SERVER, &handleServerSetup},
+  {OPTION_REST, &handleServerSetup},
   {OPTION_MQTT, &handleMQTTSetup},
 };
 
 const configDictionary runConfig[] {
-  {OPTION_SERVER, &handleServer},
+  {OPTION_REST, &handleServer},
   {OPTION_MQTT, &handleMQTT},
 };
 

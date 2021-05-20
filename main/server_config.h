@@ -5,5 +5,5 @@
 #define MQTT_PORT 1883
 #define SETUP_DELAY 500
 #define VERSION "0.0.0"
-#define OPTION_SERVER 0
+#define OPTION_REST 0
 #define OPTION_MQTT 1
