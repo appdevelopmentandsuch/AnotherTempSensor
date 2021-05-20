@@ -55,31 +55,42 @@ You should be able to query the API by opening an API application such as Postma
 
 #### Documentation
 
-GET /api/read/all/
+**GET** `/api/read/all/`
 
+```bash
 {
 "temperature": 22.5,
 "humidity": 45,
 "identifier": "##:##:##:##:##:##"
 }
-GET /api/read/temperature/
+```
 
+**GET** `/api/read/temperature/`
+
+```bash
 {
 "temperature": 22.5,
 "identifier": "##:##:##:##:##:##"
 }
-GET /api/read/humidity/
+```
 
+**GET** `/api/read/humidity/`
+
+```bash
 {
 "humidity": 45,
 "identifier": "##:##:##:##:##:##"
 }
-GET /api/info/
+```
 
+**GET** `/api/info/`
+
+```bash
 {
 "identifier": "##:##:##:##:##:##",
 "version": "#.#.#"
 }
+```
 
 **WARNING** The current REST API server setup is not a very secure method of protecting your endpoints, as the username and password are simply base64 encoded and can be read VERY easily as the server is not HTTPS encrypted. This is HOPEFULLY a temporary measure until something sturdier is put in place.
 
