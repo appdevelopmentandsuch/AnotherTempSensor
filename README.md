@@ -21,7 +21,7 @@ Temperature / Humidity Logger using NodeMCU, DHT11, sending data either using MQ
 
 2. Go to `File -> Preferences` and under `Additional Boards Manager URLs` enter `http://arduino.esp8266.com/stable/package_esp8266com_index.json`
 
-3. Install the necessary libraries.
+3. Install the necessary libraries by going to `Tools -> Manage Libraries...` and filtering on the libraries below.
 
 ```bash
 ArduinoJson Version 6.18.0
