@@ -7,7 +7,7 @@
 #include <ESP8266WiFi.h>
 #include <string.h>
 
-ESP8266WebServer server(80);
+ESP8266WebServer restServer(80);
 
 char server_user[] = SECRET_SERVER_USERNAME;
 char server_pass[] = SECRET_SERVER_PASSWORD;
@@ -16,12 +16,12 @@ String version = VERSION;
 
 // HTTP Server Methods
 void handleServer() {
-  server.handleClient();  
+  restServer.handleClient();  
 }
 
 void checkAuth() {
-  if (!server.authenticate(server_user, server_pass)) {
-        return server.requestAuthentication();
+  if (!restServer.authenticate(server_user, server_pass)) {
+        return restServer.requestAuthentication();
   }
 }
 
@@ -29,7 +29,7 @@ void sendJSONResponse(DynamicJsonDocument doc) {
   String response = "";
   serializeJson(doc, response);
 
-  server.send(200, "application/json", response);
+  restServer.send(200, "application/json", response);
 }
 
 void handleReadAll()
@@ -89,9 +89,9 @@ void handleGetInfo()
 }
 
 void handleServerSetup() {
-  server.on("/api/read/all/", handleReadAll);
-  server.on("/api/read/temperature/", handleReadTemperature);
-  server.on("/api/read/humidity/", handleReadHumidity);
-  server.on("/api/info/", handleGetInfo);
-  server.begin();
+  restServer.on("/api/read/all/", handleReadAll);
+  restServer.on("/api/read/temperature/", handleReadTemperature);
+  restServer.on("/api/read/humidity/", handleReadHumidity);
+  restServer.on("/api/info/", handleGetInfo);
+  restServer.begin();
 }
