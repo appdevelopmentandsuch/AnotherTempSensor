@@ -16,13 +16,13 @@
 #define OPTION_MQTT 1
 #define OPTION_CONFIG 2
 
-#define ADDRESS_SSID 0
-#define ADDRESS_PASS ADDRESS_SSID + sizeof(String)
-#define ADDRESS_MQTT_BROKER ADDRESS_PASS + sizeof(String)
-#define ADDRESS_MQTT_USER ADDRESS_MQTT_BROKER + sizeof(String)
-#define ADDRESS_MQTT_PASS ADDRESS_MQTT_USER + sizeof(String)
-#define ADDRESS_REST_USER ADDRESS_MQTT_PASS + sizeof(String)
-#define ADDRESS_REST_PASS ADDRESS_REST_USER + sizeof(String)
-#define ADDRESS_SERVICE_CONFIG ADDRESS_REST_PASS + sizeof(String)
+#define ADDRESS_SSID (int)0
+#define ADDRESS_PASS (int)ADDRESS_SSID + sizeof(String)
+#define ADDRESS_MQTT_BROKER (int)ADDRESS_PASS + sizeof(String)
+#define ADDRESS_MQTT_USER (int)ADDRESS_MQTT_BROKER + sizeof(String)
+#define ADDRESS_MQTT_PASS (int)ADDRESS_MQTT_USER + sizeof(String)
+#define ADDRESS_REST_USER (int)ADDRESS_MQTT_PASS + sizeof(String)
+#define ADDRESS_REST_PASS (int)ADDRESS_REST_USER + sizeof(String)
+#define ADDRESS_SERVICE_CONFIG (int)ADDRESS_REST_PASS + sizeof(String)
 
 #endif

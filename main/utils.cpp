@@ -11,7 +11,7 @@ const char* readString(int add) {
   return result;
 }
 
-int readInt(char add) {
+int readInt(int add) {
   int result;
   EEPROM.get(add,result);
 
@@ -27,7 +27,7 @@ void writeString(int add, const char* data)
   readString(add);
 }
 
-void writeInt(char add, int data)
+void writeInt(int add, int data)
 {
   EEPROM.put(add, data);
   EEPROM.commit();
