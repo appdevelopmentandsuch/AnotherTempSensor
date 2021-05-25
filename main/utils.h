@@ -1,9 +1,12 @@
 #ifndef UTILS_H
 #define UTILS_H
+#include <string.h>
 
-const char* readString(int add);
-int readInt(int add);
-void writeString(int add, const char* data);
-void writeInt(int add, int data);
+settings_t settings;
+
+String readString(int addr);
+int readInt(int addr);
+int writeString(int addr, String data);
+int writeInt(int addr, int data);
 
 #endif
