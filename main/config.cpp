@@ -3,6 +3,7 @@
 #include "utils.h"
 #include <ArduinoJson.h>
 #include <ESP8266WebServer.h>
+#include "wifi.h"
 
 ESP8266WebServer configServer(80);
 
@@ -18,8 +19,18 @@ serverSettings defaultSettings {
     ""
 };
 
-void resetConfig() {
+void setDefaultConfig() {
     storeStruct(&defaultSettings, sizeof(defaultSettings));
+}
+
+void resetConfig() {
+    setDefaultConfig();
+
+    WiFi.disconnect();
+
+    while(isConnected()) {
+        delay(100);
+    }
 
     ESP.reset();
 }
@@ -46,7 +57,7 @@ void handleConfig() {
     if(config > OPTION_MQTT || config < OPTION_REST) {
         configServer.send(400, "text/plain", "Invalid service, must select 0 for REST, or 1 for MQTT, restarting...");
     } else {
-        configServer.send(200, "text/json", "{success:true}");
+        configServer.send(200, "text/json", "{\n\tsuccess:true}");
         serverSettings userConfig {
             config,
             ssid,
@@ -60,7 +71,8 @@ void handleConfig() {
         };
 
         storeStruct(&userConfig, sizeof(userConfig));
-        delay(500);
+        WiFi.softAPdisconnect(true);
+        delay(5000);
         ESP.reset();
     }
 }

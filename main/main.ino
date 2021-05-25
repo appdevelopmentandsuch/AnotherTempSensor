@@ -17,6 +17,10 @@ void setup() {
 
   handleWifiSetup();
 
+  Serial.println(settings.serviceConfig);
+  Serial.println(settings.ssid);
+  Serial.println(settings.pass);
+
   setupConfig[settings.serviceConfig].func();
 }
 

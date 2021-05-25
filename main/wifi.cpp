@@ -11,23 +11,39 @@ bool isConnected() {
     return WiFi.status() == WL_CONNECTED;
 }
 
+void handleNoWifi() {
+  Serial.println("Unable to connect to Wifi, starting device Wifi...");
+  const char* defaultSSID = SECRET_DEVICE_SSID;
+  const char* defaultPass = SECRET_DEVICE_PASS;
+  setDefaultConfig();
+  WiFi.softAP(defaultSSID, defaultPass, 9, 0, 1);
+}
+
 void handleWifiSetup() {
-  WiFi.begin(settings.ssid, settings.pass);
+  
+  const char* ssid = settings.ssid; 
+  const char* pass = settings.pass; 
 
-  uint tries = 0;
+  if(ssid != "" && pass != "") {
+    WiFi.begin(ssid, pass);
 
-  while (!isConnected() && tries < 10) {
-    delay(SETUP_DELAY);
-    tries += 1;
-  }
+    uint tries = 0;
+      while (!isConnected() && tries < 10) {
+        delay(SETUP_DELAY);
+        tries += 1;
+      }
 
-  if(isConnected() && tries < 10) {
-    Serial.println("WiFi connected.");
-    Serial.print("Got IP: ");  Serial.println(WiFi.localIP());
+    if(isConnected() && tries < 10) {
+      Serial.println("WiFi connected.");
+      Serial.print("Got IP: ");  Serial.println(WiFi.localIP());
+      if(settings.serviceConfig > OPTION_MQTT || settings.serviceConfig < OPTION_REST) {
+        settings.serviceConfig = OPTION_REST;
+        storeStruct(&settings, sizeof(settings));
+      }
+    } else {
+      handleNoWifi();
+    }
   } else {
-    Serial.println("Unable to connect to Wifi, starting device Wifi...");
-    const char* defaultSSID = SECRET_DEVICE_SSID;
-    const char* defaultPass = SECRET_DEVICE_PASS;
-    WiFi.softAP(defaultSSID, defaultPass, 9, 0, 1);
+    handleNoWifi();
   }
 }
