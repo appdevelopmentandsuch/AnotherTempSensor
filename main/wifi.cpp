@@ -12,10 +12,7 @@ bool isConnected() {
 }
 
 void handleWifiSetup() {
-  const char* ssid = readString(ADDRESS_SSID);
-  const char* pass = readString(ADDRESS_PASS);
-
-  WiFi.begin(ssid, pass);
+  WiFi.begin(settings.ssid, settings.pass);
 
   uint tries = 0;
 
@@ -28,7 +25,6 @@ void handleWifiSetup() {
     Serial.println("WiFi connected.");
     Serial.print("Got IP: ");  Serial.println(WiFi.localIP());
   } else {
-    setServiceConfig(OPTION_CONFIG);
     Serial.println("Unable to connect to Wifi, starting device Wifi...");
     const char* defaultSSID = SECRET_DEVICE_SSID;
     const char* defaultPass = SECRET_DEVICE_PASS;

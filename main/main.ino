@@ -10,19 +10,18 @@
 
 void setup() {
   Serial.begin(115200);
-  EEPROM.begin(512);
   dht.begin();
   pinMode(BUTTON_INPUT, INPUT);
 
+  loadStruct(&settings, sizeof(settings));
+
   handleWifiSetup();
 
-  int configAddr = readInt(ADDRESS_SERVICE_CONFIG);
-
-  setupConfig[currentConfig].func();
+  setupConfig[settings.serviceConfig].func();
 }
 
 void loop() {
-  runConfig[currentConfig].func();
+  runConfig[settings.serviceConfig].func();
 
   if(digitalRead(BUTTON_INPUT) == LOW) {
     resetConfig();

@@ -1,19 +1,18 @@
 #include "utils.h"
 #include <EEPROM.h>
 #include <HardwareSerial.h>
-#include <string.h>
 
-typedef struct {
-  int service_config;
-  String ssid;
-  String pass;
-  String mqtt_broker;
-  int mqtt_port;
-  String mqtt_user;
-  String mqtt_pass;
-  String rest_user;
-  String rest_pass;
-} settings_t __attribute__ ((packed));
+serverSettings settings  {
+    0,
+    "",
+    "",
+    "",
+    1883,
+    "",
+    "",
+    "",
+    ""
+};
 
 void storeStruct(void *data_source, size_t size)
 {

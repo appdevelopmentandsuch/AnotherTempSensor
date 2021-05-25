@@ -5,14 +5,10 @@
 #include <ArduinoMqttClient.h>
 #include <ESP8266WiFi.h>
 #include <string.h>
+#include "utils.h"
 
-char mqttPass[] = SECRET_MQTT_PASS;
-char mqttUser[] = SECRET_MQTT_USER;
-
-const char broker[] = MQTT_BROKER;
 const String humidityTopic  = "humidity";
 const String tempTopic  = "temperature";
-int        port     = MQTT_PORT;
 
 
 WiFiClient wifiClient;
@@ -20,11 +16,11 @@ MqttClient mqttClient(wifiClient);
 
 // MQTT Methods
 void handleMQTTSetup() {
-  if(!(mqttUser == "" || mqttPass == "")) {
-    mqttClient.setUsernamePassword(mqttUser, mqttPass);
+  if(!(settings.mqttUser == "" || settings.mqttPass == "")) {
+    mqttClient.setUsernamePassword(settings.mqttUser, settings.mqttPass);
   }
 
-  if (!mqttClient.connect(broker, port)) {
+  if (!mqttClient.connect(settings.mqttBroker, settings.mqttPort)) {
     delay(SETUP_DELAY);
     while (1);
   }

@@ -11,8 +11,6 @@ void handleConfigServer();
 void resetConfig();
 void setServiceConfig(int service);
 
-extern uint8_t currentConfig;
-
 typedef struct { 
   uint8_t itemConfig;
   void (*func)(void);

@@ -10,8 +10,8 @@
 
 #define BUTTON_INPUT 0
 
-#define OPTION_REST 0
-#define OPTION_MQTT 1
-#define OPTION_CONFIG 2
+#define OPTION_CONFIG 0
+#define OPTION_REST 1
+#define OPTION_MQTT 2
 
 #endif
