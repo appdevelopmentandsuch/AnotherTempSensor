@@ -17,15 +17,15 @@ typedef struct {
 } configDictionary;
 
 const configDictionary setupConfig[] {
+  {OPTION_CONFIG, &handleConfigServerSetup},
   {OPTION_REST, &handleServerSetup},
   {OPTION_MQTT, &handleMQTTSetup},
-  {OPTION_CONFIG, &handleConfigServerSetup},
 };
 
 const configDictionary runConfig[] {
+  {OPTION_CONFIG, &handleConfigServer},
   {OPTION_REST, &handleServer},
   {OPTION_MQTT, &handleMQTT},
-  {OPTION_CONFIG, &handleConfigServer},
 };
 
 #endif
