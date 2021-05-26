@@ -1,16 +1,14 @@
+#include "http.h"
 #include "rest.h"
-#include "secrets.h"
 #include "sensor_dht.h"
 #include "server_config.h"
+#include "utils.h"
 #include <ArduinoJson.h>
 #include <ESP8266WebServer.h>
 #include <ESP8266WiFi.h>
 #include <string.h>
 
 ESP8266WebServer restServer(80);
-
-char server_user[] = SECRET_SERVER_USERNAME;
-char server_pass[] = SECRET_SERVER_PASSWORD;
 
 String version = VERSION;
 
@@ -20,7 +18,9 @@ void handleServer() {
 }
 
 void checkAuth() {
-  if (!restServer.authenticate(server_user, server_pass)) {
+  const char* serverUser = settings[JSON_SETTING_REST_USER];
+  const char* serverPass = settings[JSON_SETTING_REST_PASS];
+  if (!restServer.authenticate(serverUser, serverPass)) {
         return restServer.requestAuthentication();
   }
 }
@@ -29,11 +29,10 @@ void sendJSONResponse(DynamicJsonDocument doc) {
   String response = "";
   serializeJson(doc, response);
 
-  restServer.send(200, "application/json", response);
+  restServer.send(HTTP_OK, HTTP_TYPE_JSON, response);
 }
 
-void handleReadAll()
-{
+void handleReadAll() {
   checkAuth();
 
   DynamicJsonDocument doc(DOC_SIZE);
@@ -48,8 +47,7 @@ void handleReadAll()
   sendJSONResponse(doc);
 }
 
-void handleReadTemperature()
-{
+void handleReadTemperature() {
   checkAuth();
 
   DynamicJsonDocument doc(DOC_SIZE);
@@ -62,8 +60,7 @@ void handleReadTemperature()
   sendJSONResponse(doc);
 }
 
-void handleReadHumidity()
-{
+void handleReadHumidity() {
   checkAuth();
 
   DynamicJsonDocument doc(DOC_SIZE);
@@ -76,8 +73,7 @@ void handleReadHumidity()
   sendJSONResponse(doc);
 }
 
-void handleGetInfo()
-{
+void handleGetInfo() {
   checkAuth();
 
   DynamicJsonDocument doc(DOC_SIZE);

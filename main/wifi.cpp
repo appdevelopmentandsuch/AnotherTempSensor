@@ -1,5 +1,4 @@
 #include "config.h"
-#include "secrets.h"
 #include "server_config.h"
 #include "utils.h"
 #include "wifi.h"
@@ -13,16 +12,16 @@ bool isConnected() {
 
 void handleNoWifi() {
   Serial.println("Unable to connect to Wifi, starting device Wifi...");
-  const char* defaultSSID = SECRET_DEVICE_SSID;
-  const char* defaultPass = SECRET_DEVICE_PASS;
+  const char* defaultSSID = DEFAULT_DEVICE_SSID;
+  const char* defaultPass = DEFAULT_DEVICE_PASS;
   setDefaultConfig();
   WiFi.softAP(defaultSSID, defaultPass, 9, 0, 1);
 }
 
 void handleWifiSetup() {
   
-  const char* ssid = settings["ssid"]; 
-  const char* pass = settings["pass"]; 
+  const char* ssid = settings[JSON_SETTING_WIFI_SSID]; 
+  const char* pass = settings[JSON_SETTING_WIFI_PASS]; 
 
   if(ssid != "" && pass != "") {
     WiFi.begin(ssid, pass);

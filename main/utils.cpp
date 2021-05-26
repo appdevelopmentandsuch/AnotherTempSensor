@@ -3,25 +3,13 @@
 #include <EEPROM.h>
 #include <HardwareSerial.h>
 #include <StreamUtils.h>
+#include <string.h>
 
 DynamicJsonDocument settings(DOC_SIZE);
 char defaultConfig[] = "{\n\t\"ssid\": \"\",\n\t\"pass\": \"\",\n\t\"mqttBroker\": \"\",\n\t\"mqttPort\": 1883,\n\t\"mqttUser\":\"\",\n\t\"mqttPass\":\"\",\n\t\"restUser\":\"\",\n\t\"restPass\":\"\",\n\t\"service\": 1\n}\"}";
 
-// bool deserializeJsonDoc(DynamicJsonDocument doc, char str[]) {
-//   DeserializationError error = deserializeJson(doc, str);
-
-//   if (error) {
-//     Serial.print(F("deserializeJson() failed: "));
-//     Serial.println(error.f_str());
-//     return false;
-//   }
-
-//   return true;
-// }
-
-bool setDefaultServerConfig() {
-  DynamicJsonDocument doc(DOC_SIZE);
-  DeserializationError error = deserializeJson(doc, defaultConfig);
+bool deserializeJsonDoc(DynamicJsonDocument doc, char str[]) {
+  DeserializationError error = deserializeJson(doc, str);
 
   if (error) {
     Serial.print(F("deserializeJson() failed: "));
@@ -29,21 +17,45 @@ bool setDefaultServerConfig() {
     return false;
   }
 
-  doc["service"] = OPTION_CONFIG;
+  return true;
+}
+
+bool deserializeJsonDoc(DynamicJsonDocument doc, String str) {
+  DeserializationError error = deserializeJson(doc, str);
+
+  if (error) {
+    Serial.print(F("deserializeJson() failed: "));
+    Serial.println(error.f_str());
+    return false;
+  }
+
+  return true;
+}
+
+bool setDefaultServerConfig() {
+  DynamicJsonDocument doc(DOC_SIZE);
+  
+  bool result = deserializeJsonDoc(doc, defaultConfig);
+
+  if(!result) {
+    return result;
+  }
+
+  doc[JSON_SETTING_SERVICE_CONFIG] = OPTION_CONFIG;
 
   return storeConfig(doc);
 }
 
 void printConfig(DynamicJsonDocument doc) {
-  int serviceConfig = doc["service"];
-  const char* ssid = doc["ssid"];
-  const char* pass = doc["pass"];
-  const char* mqttBroker = doc["mqttBroker"];
-  int mqttPort = doc["mqttPort"];
-  const char* mqttUser = doc["mqttUser"];
-  const char* mqttPass = doc["mqttPass"];
-  const char* restUser = doc["restUser"];
-  const char* restPass = doc["restPass"];
+  int serviceConfig = doc[JSON_SETTING_SERVICE_CONFIG];
+  const char* ssid = doc[JSON_SETTING_WIFI_SSID];
+  const char* pass = doc[JSON_SETTING_WIFI_PASS];
+  const char* mqttBroker = doc[JSON_SETTING_MQTT_BROKER];
+  int mqttPort = doc[JSON_SETTING_MQTT_PORT];
+  const char* mqttUser = doc[JSON_SETTING_MQTT_USER];
+  const char* mqttPass = doc[JSON_SETTING_MQTT_PASS];
+  const char* restUser = doc[JSON_SETTING_REST_USER];
+  const char* restPass = doc[JSON_SETTING_REST_PASS];
 
   Serial.println("\n===========================================");
   Serial.print("serviceConfig: "); Serial.println(serviceConfig);

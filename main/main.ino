@@ -1,7 +1,6 @@
 #include "config.h"
 #include "mqtt.h"
 #include "rest.h"
-#include "secrets.h"
 #include "sensor_dht.h"
 #include "server_config.h"
 #include "utils.h"
@@ -18,7 +17,7 @@ void setup() {
 
   settings = loadConfig();
 
-  serviceConfig = settings["service"];
+  serviceConfig = settings[JSON_SETTING_SERVICE_CONFIG];
 
   handleWifiSetup();
 
