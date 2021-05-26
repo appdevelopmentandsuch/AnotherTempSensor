@@ -8,6 +8,35 @@
 
 ESP8266WebServer configServer(80);
 
+bool validExpectedService(DynamicJsonDocument doc, int service) {
+    return doc.containsKey(JSON_SETTING_SERVICE_CONFIG) && 
+        doc[JSON_SETTING_SERVICE_CONFIG] == service;
+}
+
+bool validService(DynamicJsonDocument doc) {
+    return doc.containsKey(JSON_SETTING_SERVICE_CONFIG) && 
+        !(doc[JSON_SETTING_SERVICE_CONFIG] > OPTION_MQTT || doc[JSON_SETTING_SERVICE_CONFIG] < OPTION_REST);
+}
+
+bool validWiFiConfig(DynamicJsonDocument doc) {
+    return doc.containsKey(JSON_SETTING_WIFI_SSID) &&
+        doc.containsKey(JSON_SETTING_WIFI_PASS);
+}
+
+bool validRESTConfig(DynamicJsonDocument doc) {
+    return doc.containsKey(JSON_SETTING_REST_USER) &&
+        doc.containsKey(JSON_SETTING_REST_PASS) &&
+        validExpectedService(doc, OPTION_REST);
+}
+
+bool validMQTTConfig(DynamicJsonDocument doc) {
+    return doc.containsKey(JSON_SETTING_MQTT_BROKER) &&
+        doc.containsKey(JSON_SETTING_MQTT_PORT) &&
+        doc.containsKey(JSON_SETTING_MQTT_USER) &&
+        doc.containsKey(JSON_SETTING_MQTT_PASS) &&
+        validExpectedService(doc, OPTION_MQTT);
+}
+
 bool setDefaultConfig() {
     return setDefaultServerConfig();
 }
@@ -35,28 +64,28 @@ void handleConfig() {
     DynamicJsonDocument doc(DOC_SIZE);
 
     bool result = deserializeJsonDoc(doc, configServer.arg("plain"));
-    int serviceConfig = doc[JSON_SETTING_SERVICE_CONFIG];
-    const char* ssid = doc[JSON_SETTING_WIFI_SSID];
-    const char* pass = doc[JSON_SETTING_WIFI_PASS];
-    const char* mqttBroker = doc[JSON_SETTING_MQTT_BROKER];
-    int mqttPort = doc[JSON_SETTING_MQTT_PORT];
-    const char* mqttUser = doc[JSON_SETTING_MQTT_USER];
-    const char* mqttPass = doc[JSON_SETTING_MQTT_PASS];
-    const char* restUser = doc[JSON_SETTING_REST_USER];
-    const char* restPass = doc[JSON_SETTING_REST_PASS];
-
-    if(serviceConfig > OPTION_MQTT || serviceConfig < OPTION_REST) {
+    if(!validService(doc)) {
         configServer.send(HTTP_BAD_REQUEST, HTTP_TYPE_JSON, HTTP_BAD_SERVICE);
     } else {
-        configServer.send(HTTP_OK, HTTP_TYPE_JSON, HTTP_SUCCESS);
-        
-        storeConfig(doc);
+        int serviceConfig = doc[JSON_SETTING_SERVICE_CONFIG];
 
-        WiFi.softAPdisconnect(true);
+        if (!validWiFiConfig(doc)) {
+            configServer.send(HTTP_BAD_REQUEST, HTTP_TYPE_JSON, HTTP_BAD_WIFI_CONFIG);
+        } else if(serviceConfig == OPTION_REST && !validRESTConfig(doc)) {
+            configServer.send(HTTP_BAD_REQUEST, HTTP_TYPE_JSON, HTTP_BAD_REST_CONFIG);
+        } else if(serviceConfig == OPTION_MQTT && !validMQTTConfig(doc)) {
+            configServer.send(HTTP_BAD_REQUEST, HTTP_TYPE_JSON, HTTP_BAD_MQTT_CONFIG);
+        } else {
+            configServer.send(HTTP_OK, HTTP_TYPE_JSON, HTTP_SUCCESS);
+            
+            storeConfig(doc);
 
-        delay(5000);
+            WiFi.softAPdisconnect(true);
 
-        ESP.reset();
+            delay(5000);
+
+            ESP.reset();
+        }
     }
 }
 
