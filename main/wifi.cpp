@@ -38,7 +38,7 @@ void handleWifiSetup() {
       Serial.print("Got IP: ");  Serial.println(WiFi.localIP());
       if(settings.serviceConfig > OPTION_MQTT || settings.serviceConfig < OPTION_REST) {
         settings.serviceConfig = OPTION_REST;
-        storeStruct(&settings, sizeof(settings));
+        storeConfig(&settings, sizeof(settings));
       }
     } else {
       handleNoWifi();

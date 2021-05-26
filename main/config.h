@@ -10,7 +10,7 @@ void handleConfigServerSetup();
 void handleConfigServer();
 void resetConfig();
 void setServiceConfig(int service);
-void setDefaultConfig();
+bool setDefaultConfig();
 
 typedef struct { 
   uint8_t itemConfig;

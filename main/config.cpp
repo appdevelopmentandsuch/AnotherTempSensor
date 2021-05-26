@@ -19,27 +19,29 @@ serverSettings defaultSettings {
     ""
 };
 
-void setDefaultConfig() {
-    storeStruct(&defaultSettings, sizeof(defaultSettings));
+bool setDefaultConfig() {
+    return storeConfig(&defaultSettings, sizeof(defaultSettings));
 }
 
 void resetConfig() {
-    setDefaultConfig();
+    bool stored = setDefaultConfig();
 
-    WiFi.disconnect();
+    if(stored) {
+        WiFi.disconnect();
 
-    while(isConnected()) {
-        delay(100);
+        while(isConnected()) {
+            delay(100);
+        }
+
+        ESP.reset();
     }
-
-    ESP.reset();
 }
 
 void handleConfig() {
-    // if (configServer.hasArg("plain")== false){ //Check if body received
-    //     configServer.send(200, "text/plain", "Body not received");
-    //     return;
-    // }
+    if (configServer.hasArg("plain") == false){ 
+        configServer.send(400, "text/json", "{\n\t\"error\":\"JSON body missing, fill out this body and include in request: {\n\t\"ssid\": \"\",\n\t\"pass\": \"\",\n\t\"mqttBroker\": \"\",\n\t\"mqttPort\": 1883,\n\t\"mqttUser\":\"\",\n\t\"mqttPass\":\"\",\n\t\"restUser\":\"\",\n\t\"restPass\":\"\",\n\t\"service\": 1\n}\"}");
+        return;
+    }
 
     DynamicJsonDocument doc(1024);
 
@@ -55,9 +57,9 @@ void handleConfig() {
     const char* restPass = doc["restPass"];
 
     if(config > OPTION_MQTT || config < OPTION_REST) {
-        configServer.send(400, "text/plain", "Invalid service, must select 0 for REST, or 1 for MQTT, restarting...");
+        configServer.send(400, "text/json", "{\n\t\"error\":\"Invalid service, select 1 for REST or 2 for MQTT.\"}");
     } else {
-        configServer.send(200, "text/json", "{\n\tsuccess:true}");
+        configServer.send(200, "text/json", "{\n\t\"success\":true}");
         serverSettings userConfig {
             config,
             ssid,
@@ -70,7 +72,7 @@ void handleConfig() {
             restPass
         };
 
-        storeStruct(&userConfig, sizeof(userConfig));
+        storeConfig(&userConfig, sizeof(userConfig));
         WiFi.softAPdisconnect(true);
         delay(5000);
         ESP.reset();

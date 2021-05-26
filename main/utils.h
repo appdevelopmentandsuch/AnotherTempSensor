@@ -17,7 +17,7 @@ typedef struct {
 
 extern serverSettings settings;
 
-void storeStruct(void *data_source, size_t size);
-void loadStruct(void *data_dest, size_t size);
+bool storeConfig(void *data_source, size_t size);
+void loadConfig(void *data_dest, size_t size);
 
 #endif

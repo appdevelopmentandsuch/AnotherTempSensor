@@ -13,13 +13,13 @@ void setup() {
   dht.begin();
   pinMode(BUTTON_INPUT, INPUT);
 
-  loadStruct(&settings, sizeof(settings));
+  loadConfig(&settings, sizeof(settings));
 
   handleWifiSetup();
 
-  Serial.println(settings.serviceConfig);
-  Serial.println(settings.ssid);
-  Serial.println(settings.pass);
+  // Serial.println(settings.serviceConfig);
+  // Serial.println(settings.ssid);
+  // Serial.println(settings.pass);
 
   setupConfig[settings.serviceConfig].func();
 }
