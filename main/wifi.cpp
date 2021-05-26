@@ -1,5 +1,5 @@
 #include "config.h"
-#include "server_config.h"
+#include "constants.h"
 #include "utils.h"
 #include "wifi.h"
 #include <EEPROM.h>
@@ -12,16 +12,14 @@ bool isConnected() {
 
 void handleNoWifi() {
   Serial.println("Unable to connect to Wifi, starting device Wifi...");
-  const char* defaultSSID = DEFAULT_DEVICE_SSID;
-  const char* defaultPass = DEFAULT_DEVICE_PASS;
   setDefaultConfig();
-  WiFi.softAP(defaultSSID, defaultPass, 9, 0, 1);
+  WiFi.softAP(DEFAULT_DEVICE_SSID, DEFAULT_DEVICE_PASS, WIFI_CHANNEL, WIFI_VISIBLE, WIFI_MAX_CONNECTIONS);
 }
 
 void handleWifiSetup() {
   
-  const char* ssid = settings[JSON_SETTING_WIFI_SSID]; 
-  const char* pass = settings[JSON_SETTING_WIFI_PASS]; 
+  const char* ssid = settings[JSON_KEY_WIFI_SSID]; 
+  const char* pass = settings[JSON_KEY_WIFI_PASS]; 
 
   if(ssid != "" && pass != "") {
     WiFi.begin(ssid, pass);
@@ -35,9 +33,9 @@ void handleWifiSetup() {
     if(isConnected() && tries < 10) {
       Serial.println("WiFi connected.");
       Serial.print("Got IP: ");  Serial.println(WiFi.localIP());
-      int serviceConfig = settings["serviceConfig"];
+      int serviceConfig = settings[JSON_KEY_SERVICE_CONFIG];
       if(serviceConfig > OPTION_MQTT || serviceConfig < OPTION_REST) {
-        settings["serviceConfig"] = OPTION_CONFIG;
+        settings[JSON_KEY_SERVICE_CONFIG] = OPTION_CONFIG;
         storeConfig(settings);
       }
     } else {

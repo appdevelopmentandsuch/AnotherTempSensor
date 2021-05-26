@@ -1,4 +1,4 @@
-#include "server_config.h"
+#include "constants.h"
 #include "utils.h"
 #include <EEPROM.h>
 #include <HardwareSerial.h>
@@ -41,21 +41,21 @@ bool setDefaultServerConfig() {
     return result;
   }
 
-  doc[JSON_SETTING_SERVICE_CONFIG] = OPTION_CONFIG;
+  doc[JSON_KEY_SERVICE_CONFIG] = OPTION_CONFIG;
 
   return storeConfig(doc);
 }
 
 void printConfig(DynamicJsonDocument doc) {
-  int serviceConfig = doc[JSON_SETTING_SERVICE_CONFIG];
-  const char* ssid = doc[JSON_SETTING_WIFI_SSID];
-  const char* pass = doc[JSON_SETTING_WIFI_PASS];
-  const char* mqttBroker = doc[JSON_SETTING_MQTT_BROKER];
-  int mqttPort = doc[JSON_SETTING_MQTT_PORT];
-  const char* mqttUser = doc[JSON_SETTING_MQTT_USER];
-  const char* mqttPass = doc[JSON_SETTING_MQTT_PASS];
-  const char* restUser = doc[JSON_SETTING_REST_USER];
-  const char* restPass = doc[JSON_SETTING_REST_PASS];
+  int serviceConfig = doc[JSON_KEY_SERVICE_CONFIG];
+  const char* ssid = doc[JSON_KEY_WIFI_SSID];
+  const char* pass = doc[JSON_KEY_WIFI_PASS];
+  const char* mqttBroker = doc[JSON_KEY_MQTT_BROKER];
+  int mqttPort = doc[JSON_KEY_MQTT_PORT];
+  const char* mqttUser = doc[JSON_KEY_MQTT_USER];
+  const char* mqttPass = doc[JSON_KEY_MQTT_PASS];
+  const char* restUser = doc[JSON_KEY_REST_USER];
+  const char* restPass = doc[JSON_KEY_REST_PASS];
 
   Serial.println("\n===========================================");
   Serial.print("serviceConfig: "); Serial.println(serviceConfig);
@@ -72,14 +72,14 @@ void printConfig(DynamicJsonDocument doc) {
 
 DynamicJsonDocument loadConfig() {
   DynamicJsonDocument doc(DOC_SIZE);
-  EepromStream eepromStream(0, DOC_SIZE);
+  EepromStream eepromStream(ADDRESS_CONFIG, DOC_SIZE);
   deserializeJson(doc, eepromStream);
-  printConfig(doc);
+
   return doc;
 }
 
 bool storeConfig(DynamicJsonDocument doc) {
-  EepromStream eepromStream(0, DOC_SIZE);
+  EepromStream eepromStream(ADDRESS_CONFIG, DOC_SIZE);
   serializeJson(doc, eepromStream);
   if(EEPROM.commit()) {
     Serial.println("Wrote config to EEPROM");

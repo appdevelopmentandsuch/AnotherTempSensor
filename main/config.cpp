@@ -1,6 +1,6 @@
 #include "config.h"
 #include "http.h"
-#include "server_config.h"
+#include "constants.h"
 #include "utils.h"
 #include "wifi.h"
 #include <ArduinoJson.h>
@@ -9,31 +9,31 @@
 ESP8266WebServer configServer(80);
 
 bool validExpectedService(DynamicJsonDocument doc, int service) {
-    return doc.containsKey(JSON_SETTING_SERVICE_CONFIG) && 
-        doc[JSON_SETTING_SERVICE_CONFIG] == service;
+    return doc.containsKey(JSON_KEY_SERVICE_CONFIG) && 
+        doc[JSON_KEY_SERVICE_CONFIG] == service;
 }
 
 bool validService(DynamicJsonDocument doc) {
-    return doc.containsKey(JSON_SETTING_SERVICE_CONFIG) && 
-        !(doc[JSON_SETTING_SERVICE_CONFIG] > OPTION_MQTT || doc[JSON_SETTING_SERVICE_CONFIG] < OPTION_REST);
+    return doc.containsKey(JSON_KEY_SERVICE_CONFIG) && 
+        !(doc[JSON_KEY_SERVICE_CONFIG] > OPTION_MQTT || doc[JSON_KEY_SERVICE_CONFIG] < OPTION_REST);
 }
 
 bool validWiFiConfig(DynamicJsonDocument doc) {
-    return doc.containsKey(JSON_SETTING_WIFI_SSID) &&
-        doc.containsKey(JSON_SETTING_WIFI_PASS);
+    return doc.containsKey(JSON_KEY_WIFI_SSID) &&
+        doc.containsKey(JSON_KEY_WIFI_PASS);
 }
 
 bool validRESTConfig(DynamicJsonDocument doc) {
-    return doc.containsKey(JSON_SETTING_REST_USER) &&
-        doc.containsKey(JSON_SETTING_REST_PASS) &&
+    return doc.containsKey(JSON_KEY_REST_USER) &&
+        doc.containsKey(JSON_KEY_REST_PASS) &&
         validExpectedService(doc, OPTION_REST);
 }
 
 bool validMQTTConfig(DynamicJsonDocument doc) {
-    return doc.containsKey(JSON_SETTING_MQTT_BROKER) &&
-        doc.containsKey(JSON_SETTING_MQTT_PORT) &&
-        doc.containsKey(JSON_SETTING_MQTT_USER) &&
-        doc.containsKey(JSON_SETTING_MQTT_PASS) &&
+    return doc.containsKey(JSON_KEY_MQTT_BROKER) &&
+        doc.containsKey(JSON_KEY_MQTT_PORT) &&
+        doc.containsKey(JSON_KEY_MQTT_USER) &&
+        doc.containsKey(JSON_KEY_MQTT_PASS) &&
         validExpectedService(doc, OPTION_MQTT);
 }
 
@@ -67,7 +67,7 @@ void handleConfig() {
     if(!validService(doc)) {
         configServer.send(HTTP_BAD_REQUEST, HTTP_TYPE_JSON, HTTP_BAD_SERVICE);
     } else {
-        int serviceConfig = doc[JSON_SETTING_SERVICE_CONFIG];
+        int serviceConfig = doc[JSON_KEY_SERVICE_CONFIG];
 
         if (!validWiFiConfig(doc)) {
             configServer.send(HTTP_BAD_REQUEST, HTTP_TYPE_JSON, HTTP_BAD_WIFI_CONFIG);
@@ -90,7 +90,7 @@ void handleConfig() {
 }
 
 void handleConfigServerSetup() {
-    configServer.on("/api/config/", HTTP_POST, handleConfig);
+    configServer.on(ENDPOINT_CONFIG, HTTP_POST, handleConfig);
     configServer.begin();
 }
 

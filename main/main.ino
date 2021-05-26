@@ -2,7 +2,7 @@
 #include "mqtt.h"
 #include "rest.h"
 #include "sensor_dht.h"
-#include "server_config.h"
+#include "constants.h"
 #include "utils.h"
 #include "wifi.h"
 #include <EEPROM.h>
@@ -17,7 +17,7 @@ void setup() {
 
   settings = loadConfig();
 
-  serviceConfig = settings[JSON_SETTING_SERVICE_CONFIG];
+  serviceConfig = settings[JSON_KEY_SERVICE_CONFIG];
 
   handleWifiSetup();
 

@@ -1,6 +1,6 @@
 #include "mqtt.h"
 #include "sensor_dht.h"
-#include "server_config.h"
+#include "constants.h"
 #include "utils.h"
 #include <ArduinoMqttClient.h>
 #include <ESP8266WiFi.h>
@@ -15,14 +15,14 @@ MqttClient mqttClient(wifiClient);
 
 // MQTT Methods
 void handleMQTTSetup() {
-  const char* mqttUser = settings[JSON_SETTING_MQTT_USER];
-  const char* mqttPass = settings[JSON_SETTING_MQTT_PASS];
+  const char* mqttUser = settings[JSON_KEY_MQTT_USER];
+  const char* mqttPass = settings[JSON_KEY_MQTT_PASS];
   if(!(mqttUser == "" || mqttPass == "")) {
     mqttClient.setUsernamePassword(mqttUser, mqttPass);
   }
 
-  const char* mqttBroker = settings[JSON_SETTING_MQTT_BROKER];
-  int mqttPort = settings[JSON_SETTING_MQTT_PORT];
+  const char* mqttBroker = settings[JSON_KEY_MQTT_BROKER];
+  int mqttPort = settings[JSON_KEY_MQTT_PORT];
   if (!mqttClient.connect(mqttBroker, mqttPort)) {
     delay(SETUP_DELAY);
     while (1);

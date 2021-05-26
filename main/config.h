@@ -3,7 +3,7 @@
 
 #include "mqtt.h"
 #include "rest.h"
-#include "server_config.h"
+#include "constants.h"
 #include "stdint.h"
 
 void handleConfigServerSetup();
