@@ -14,4 +14,6 @@
 #define OPTION_REST 1
 #define OPTION_MQTT 2
 
+#define DOC_SIZE 1024
+
 #endif

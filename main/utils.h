@@ -2,22 +2,13 @@
 #define UTILS_H
 
 #include <stdlib.h>
+#include <ArduinoJson.h>
 
-typedef struct {
-  int serviceConfig;
-  const char* ssid;
-  const char* pass;
-  const char* mqttBroker;
-  int mqttPort;
-  const char* mqttUser;
-  const char* mqttPass;
-  const char* restUser;
-  const char* restPass;
-} serverSettings;
+extern DynamicJsonDocument settings;
+extern char defaultConfig[];
 
-extern serverSettings settings;
-
-bool storeConfig(void *data_source, size_t size);
-void loadConfig(void *data_dest, size_t size);
+bool setDefaultServerConfig();
+bool storeConfig(DynamicJsonDocument doc);
+DynamicJsonDocument loadConfig();
 
 #endif

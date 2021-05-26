@@ -16,11 +16,15 @@ MqttClient mqttClient(wifiClient);
 
 // MQTT Methods
 void handleMQTTSetup() {
-  if(!(settings.mqttUser == "" || settings.mqttPass == "")) {
-    mqttClient.setUsernamePassword(settings.mqttUser, settings.mqttPass);
+  const char* mqttUser = settings["mqttUser"];
+  const char* mqttPass = settings["mqttPass"];
+  if(!(mqttUser == "" || mqttPass == "")) {
+    mqttClient.setUsernamePassword(mqttUser, mqttPass);
   }
 
-  if (!mqttClient.connect(settings.mqttBroker, settings.mqttPort)) {
+  const char* mqttBroker = settings["mqttBroker"];
+  int mqttPort = settings["mqttPort"];
+  if (!mqttClient.connect(mqttBroker, mqttPort)) {
     delay(SETUP_DELAY);
     while (1);
   }

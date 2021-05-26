@@ -21,8 +21,8 @@ void handleNoWifi() {
 
 void handleWifiSetup() {
   
-  const char* ssid = settings.ssid; 
-  const char* pass = settings.pass; 
+  const char* ssid = settings["ssid"]; 
+  const char* pass = settings["pass"]; 
 
   if(ssid != "" && pass != "") {
     WiFi.begin(ssid, pass);
@@ -36,9 +36,10 @@ void handleWifiSetup() {
     if(isConnected() && tries < 10) {
       Serial.println("WiFi connected.");
       Serial.print("Got IP: ");  Serial.println(WiFi.localIP());
-      if(settings.serviceConfig > OPTION_MQTT || settings.serviceConfig < OPTION_REST) {
-        settings.serviceConfig = OPTION_REST;
-        storeConfig(&settings, sizeof(settings));
+      int serviceConfig = settings["serviceConfig"];
+      if(serviceConfig > OPTION_MQTT || serviceConfig < OPTION_REST) {
+        settings["serviceConfig"] = OPTION_CONFIG;
+        storeConfig(settings);
       }
     } else {
       handleNoWifi();

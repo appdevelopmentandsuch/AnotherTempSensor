@@ -7,20 +7,8 @@
 
 ESP8266WebServer configServer(80);
 
-serverSettings defaultSettings {
-    0,
-    "",
-    "",
-    "",
-    1883,
-    "",
-    "",
-    "",
-    ""
-};
-
 bool setDefaultConfig() {
-    return storeConfig(&defaultSettings, sizeof(defaultSettings));
+    return setDefaultServerConfig();
 }
 
 void resetConfig() {
@@ -39,11 +27,12 @@ void resetConfig() {
 
 void handleConfig() {
     if (configServer.hasArg("plain") == false){ 
-        configServer.send(400, "text/json", "{\n\t\"error\":\"JSON body missing, fill out this body and include in request: {\n\t\"ssid\": \"\",\n\t\"pass\": \"\",\n\t\"mqttBroker\": \"\",\n\t\"mqttPort\": 1883,\n\t\"mqttUser\":\"\",\n\t\"mqttPass\":\"\",\n\t\"restUser\":\"\",\n\t\"restPass\":\"\",\n\t\"service\": 1\n}\"}");
+        char errorMessage[] = "{\n\t\"error\":\"JSON body missing, fill out this body and include in request: ";
+        configServer.send(400, "text/json",  strcat(errorMessage, defaultConfig));
         return;
     }
 
-    DynamicJsonDocument doc(1024);
+    DynamicJsonDocument doc(DOC_SIZE);
 
     deserializeJson(doc, configServer.arg("plain"));
     int config = doc["service"];
@@ -60,21 +49,13 @@ void handleConfig() {
         configServer.send(400, "text/json", "{\n\t\"error\":\"Invalid service, select 1 for REST or 2 for MQTT.\"}");
     } else {
         configServer.send(200, "text/json", "{\n\t\"success\":true}");
-        serverSettings userConfig {
-            config,
-            ssid,
-            pass,
-            mqttBroker,
-            mqttPort,
-            mqttUser,
-            mqttPass,
-            restUser,
-            restPass
-        };
+        
+        storeConfig(doc);
 
-        storeConfig(&userConfig, sizeof(userConfig));
         WiFi.softAPdisconnect(true);
+
         delay(5000);
+
         ESP.reset();
     }
 }

@@ -36,7 +36,7 @@ void handleReadAll()
 {
   checkAuth();
 
-  DynamicJsonDocument doc(1024);
+  DynamicJsonDocument doc(DOC_SIZE);
 
   float humidity = dht.readHumidity();
   float temperature = dht.readTemperature();
@@ -52,7 +52,7 @@ void handleReadTemperature()
 {
   checkAuth();
 
-  DynamicJsonDocument doc(1024);
+  DynamicJsonDocument doc(DOC_SIZE);
 
   float temperature = dht.readTemperature();
 
@@ -66,7 +66,7 @@ void handleReadHumidity()
 {
   checkAuth();
 
-  DynamicJsonDocument doc(1024);
+  DynamicJsonDocument doc(DOC_SIZE);
 
   float humidity = dht.readHumidity();
 
@@ -80,7 +80,7 @@ void handleGetInfo()
 {
   checkAuth();
 
-  DynamicJsonDocument doc(1024);
+  DynamicJsonDocument doc(DOC_SIZE);
 
   doc["identifier"] = WiFi.macAddress();
   doc["version"] = version;

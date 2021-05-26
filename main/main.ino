@@ -8,24 +8,25 @@
 #include "wifi.h"
 #include <EEPROM.h>
 
+int serviceConfig = OPTION_CONFIG;
+
 void setup() {
   Serial.begin(115200);
   dht.begin();
+  EEPROM.begin(DOC_SIZE);
   pinMode(BUTTON_INPUT, INPUT);
 
-  loadConfig(&settings, sizeof(settings));
+  settings = loadConfig();
+
+  serviceConfig = settings["service"];
 
   handleWifiSetup();
 
-  // Serial.println(settings.serviceConfig);
-  // Serial.println(settings.ssid);
-  // Serial.println(settings.pass);
-
-  setupConfig[settings.serviceConfig].func();
+  setupConfig[serviceConfig].func();
 }
 
 void loop() {
-  runConfig[settings.serviceConfig].func();
+  runConfig[serviceConfig].func();
 
   if(digitalRead(BUTTON_INPUT) == LOW) {
     resetConfig();
