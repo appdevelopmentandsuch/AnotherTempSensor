@@ -14,6 +14,7 @@ void setup() {
   dht.begin();
   EEPROM.begin(DOC_SIZE);
   pinMode(BUTTON_INPUT, INPUT);
+  attachInterrupt(BUTTON_INPUT, resetConfig, RISING);
 
   settings = loadConfig();
 
@@ -26,8 +27,4 @@ void setup() {
 
 void loop() {
   runConfig[serviceConfig].func();
-
-  if(digitalRead(BUTTON_INPUT) == LOW) {
-    resetConfig();
-  }
 }

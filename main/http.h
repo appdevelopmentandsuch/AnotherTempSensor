@@ -13,5 +13,6 @@
 #define HTTP_BAD_WIFI_CONFIG "{\n\t\"error\":\"Missing a wifi configuration, please add one.\"}"
 #define HTTP_BAD_REST_CONFIG "{\n\t\"error\":\"Invalid REST config, double check the config and try again.\"}"
 #define HTTP_BAD_MQTT_CONFIG "{\n\t\"error\":\"Invalid MQTT config, double check the config and try again.\"}"
+#define HTTP_ERROR_PARSING_BODY "{\n\t\"error\":\"Unable to parse config.\"}"
 
 #endif

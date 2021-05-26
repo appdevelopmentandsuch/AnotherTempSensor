@@ -9,13 +9,20 @@
 ESP8266WebServer configServer(80);
 
 bool validExpectedService(DynamicJsonDocument doc, int service) {
-    return doc.containsKey(JSON_KEY_SERVICE_CONFIG) && 
-        doc[JSON_KEY_SERVICE_CONFIG] == service;
+    if (doc.containsKey(JSON_KEY_SERVICE_CONFIG)) {
+        int config = doc[JSON_KEY_SERVICE_CONFIG];
+        return config == service;
+    }
+    return false; 
 }
 
 bool validService(DynamicJsonDocument doc) {
-    return doc.containsKey(JSON_KEY_SERVICE_CONFIG) && 
-        !(doc[JSON_KEY_SERVICE_CONFIG] > OPTION_MQTT || doc[JSON_KEY_SERVICE_CONFIG] < OPTION_REST);
+    if (doc.containsKey(JSON_KEY_SERVICE_CONFIG)) {
+        int config = doc[JSON_KEY_SERVICE_CONFIG];
+        return config <= OPTION_MQTT && 
+        config >= OPTION_REST;
+    }
+    return false; 
 }
 
 bool validWiFiConfig(DynamicJsonDocument doc) {
@@ -41,13 +48,16 @@ bool setDefaultConfig() {
     return setDefaultServerConfig();
 }
 
-void resetConfig() {
+ICACHE_RAM_ATTR void resetConfig() {
+    Serial.println("Resetting");
     bool stored = setDefaultConfig();
 
     if(stored) {
-        WiFi.disconnect();
+        while(!WiFi.disconnect()) {
+            delay(100);
+        }
 
-        while(isConnected()) {
+        while(!WiFi.softAPdisconnect(true)) {
             delay(100);
         }
 
@@ -63,8 +73,11 @@ void handleConfig() {
 
     DynamicJsonDocument doc(DOC_SIZE);
 
-    bool result = deserializeJsonDoc(doc, configServer.arg("plain"));
-    if(!validService(doc)) {
+    DeserializationError error = deserializeJson(doc, configServer.arg("plain"));
+
+    if(error) {
+        configServer.send(HTTP_BAD_REQUEST, HTTP_TYPE_JSON, HTTP_ERROR_PARSING_BODY);
+    } else if(!validService(doc)) {
         configServer.send(HTTP_BAD_REQUEST, HTTP_TYPE_JSON, HTTP_BAD_SERVICE);
     } else {
         int serviceConfig = doc[JSON_KEY_SERVICE_CONFIG];
@@ -82,7 +95,7 @@ void handleConfig() {
 
             WiFi.softAPdisconnect(true);
 
-            delay(5000);
+            // delay(5000);
 
             ESP.reset();
         }

@@ -17,7 +17,6 @@ void handleNoWifi() {
 }
 
 void handleWifiSetup() {
-  
   const char* ssid = settings[JSON_KEY_WIFI_SSID]; 
   const char* pass = settings[JSON_KEY_WIFI_PASS]; 
 

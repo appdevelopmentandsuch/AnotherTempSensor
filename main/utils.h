@@ -11,7 +11,6 @@ extern char defaultConfig[];
 bool setDefaultServerConfig();
 bool storeConfig(DynamicJsonDocument doc);
 DynamicJsonDocument loadConfig();
-bool deserializeJsonDoc(DynamicJsonDocument doc, char str[]);
-bool deserializeJsonDoc(DynamicJsonDocument doc, String str);
+void printConfig(DynamicJsonDocument doc);
 
 #endif

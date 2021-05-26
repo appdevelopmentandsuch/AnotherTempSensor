@@ -6,42 +6,12 @@
 #include <string.h>
 
 DynamicJsonDocument settings(DOC_SIZE);
-char defaultConfig[] = "{\n\t\"ssid\": \"\",\n\t\"pass\": \"\",\n\t\"mqttBroker\": \"\",\n\t\"mqttPort\": 1883,\n\t\"mqttUser\":\"\",\n\t\"mqttPass\":\"\",\n\t\"restUser\":\"\",\n\t\"restPass\":\"\",\n\t\"service\": 1\n}\"}";
-
-bool deserializeJsonDoc(DynamicJsonDocument doc, char str[]) {
-  DeserializationError error = deserializeJson(doc, str);
-
-  if (error) {
-    Serial.print(F("deserializeJson() failed: "));
-    Serial.println(error.f_str());
-    return false;
-  }
-
-  return true;
-}
-
-bool deserializeJsonDoc(DynamicJsonDocument doc, String str) {
-  DeserializationError error = deserializeJson(doc, str);
-
-  if (error) {
-    Serial.print(F("deserializeJson() failed: "));
-    Serial.println(error.f_str());
-    return false;
-  }
-
-  return true;
-}
+char defaultConfig[] = "{\n\t\"ssid\": \"\",\n\t\"pass\": \"\",\n\t\"mqttBroker\": \"\",\n\t\"mqttPort\": 1883,\n\t\"mqttUser\":\"\",\n\t\"mqttPass\":\"\",\n\t\"restUser\":\"\",\n\t\"restPass\":\"\",\n\t\"service\": 0\n}";
 
 bool setDefaultServerConfig() {
   DynamicJsonDocument doc(DOC_SIZE);
   
-  bool result = deserializeJsonDoc(doc, defaultConfig);
-
-  if(!result) {
-    return result;
-  }
-
-  doc[JSON_KEY_SERVICE_CONFIG] = OPTION_CONFIG;
+  deserializeJson(doc, defaultConfig);
 
   return storeConfig(doc);
 }
