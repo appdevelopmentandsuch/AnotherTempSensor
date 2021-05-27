@@ -61,6 +61,8 @@ ICACHE_RAM_ATTR void resetConfig() {
             delay(100);
         }
 
+        detachInterrupt(digitalPinToInterrupt(BUTTON_INPUT));
+
         ESP.reset();
     }
 }
@@ -89,15 +91,27 @@ void handleConfig() {
         } else if(serviceConfig == OPTION_MQTT && !validMQTTConfig(doc)) {
             configServer.send(HTTP_BAD_REQUEST, HTTP_TYPE_JSON, HTTP_BAD_MQTT_CONFIG);
         } else {
-            configServer.send(HTTP_OK, HTTP_TYPE_JSON, HTTP_SUCCESS);
-            
-            storeConfig(doc);
+            bool stored = storeConfig(doc);
+            if(stored) {
+                configServer.send(HTTP_OK, HTTP_TYPE_JSON, HTTP_SUCCESS);
+                
+                delay(10); //Adding slight delay in order to send the response
+                
+                configServer.close();
+                while(!WiFi.disconnect()) {
+                    delay(100);
+                }
 
-            WiFi.softAPdisconnect(true);
+                while(!WiFi.softAPdisconnect(true)) {
+                    delay(100);
+                }
 
-            // delay(5000);
+                detachInterrupt(digitalPinToInterrupt(BUTTON_INPUT));
 
-            ESP.reset();
+                ESP.reset();
+            } else {
+                configServer.send(HTTP_BAD_REQUEST, HTTP_TYPE_JSON, HTTP_ERROR_UNABLE_TO_STORE_CONFIG);
+            }
         }
     }
 }

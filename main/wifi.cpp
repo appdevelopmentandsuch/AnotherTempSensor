@@ -20,7 +20,12 @@ void handleWifiSetup() {
   const char* ssid = settings[JSON_KEY_WIFI_SSID]; 
   const char* pass = settings[JSON_KEY_WIFI_PASS]; 
 
+  while(!WiFi.disconnect()) {
+    delay(100);
+  }
+
   if(ssid != "" && pass != "") {
+    Serial.print("Connecting with ssid: \""); Serial.print(ssid); Serial.print("\" and pass: \""); Serial.print(pass); Serial.println("\"");
     WiFi.begin(ssid, pass);
 
     uint tries = 0;
