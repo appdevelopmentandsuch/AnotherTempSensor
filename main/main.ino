@@ -16,7 +16,6 @@ void setup() {
   EEPROM.begin(DOC_SIZE);
 
   pinMode(BUTTON_INPUT, INPUT);
-  attachInterrupt(digitalPinToInterrupt(BUTTON_INPUT), resetConfig, RISING);
 
   settings = loadConfig();
 
@@ -25,6 +24,8 @@ void setup() {
   handleWifiSetup();
 
   setupConfig[serviceConfig].func();
+
+  attachInterrupt(digitalPinToInterrupt(BUTTON_INPUT), resetConfig, RISING);
 }
 
 void loop() {

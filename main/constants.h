@@ -6,6 +6,7 @@
 #define DHT_TYPE DHT11
 #define LOOP_DELAY 5000
 #define SETUP_DELAY 500
+#define SEND_DELAY 500
 #define VERSION "0.0.0"
 
 #define WIFI_CHANNEL 9

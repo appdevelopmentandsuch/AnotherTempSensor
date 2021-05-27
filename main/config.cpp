@@ -95,7 +95,7 @@ void handleConfig() {
             if(stored) {
                 configServer.send(HTTP_OK, HTTP_TYPE_JSON, HTTP_SUCCESS);
                 
-                delay(500); //Adding slight delay in order to send the response
+                delay(SEND_DELAY); //Adding slight delay in order to send the response
                 
                 configServer.close();
                 while(!WiFi.disconnect()) {
