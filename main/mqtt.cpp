@@ -1,32 +1,35 @@
 #include "mqtt.h"
-#include "secrets.h"
 #include "sensor_dht.h"
-#include "server_config.h"
+#include "constants.h"
+#include "utils.h"
 #include <ArduinoMqttClient.h>
 #include <ESP8266WiFi.h>
 #include <string.h>
-
-char mqttPass[] = SECRET_MQTT_PASS;
-char mqttUser[] = SECRET_MQTT_USER;
-
-const char broker[] = MQTT_BROKER;
-const String humidityTopic  = "humidity";
-const String tempTopic  = "temperature";
-int        port     = MQTT_PORT;
-
 
 WiFiClient wifiClient;
 MqttClient mqttClient(wifiClient);
 
 // MQTT Methods
 void handleMQTTSetup() {
+  DynamicJsonDocument settings = loadConfig();
+  const char* mqttUser = settings[JSON_KEY_MQTT_USER];
+  const char* mqttPass = settings[JSON_KEY_MQTT_PASS];
+
   if(!(mqttUser == "" || mqttPass == "")) {
     mqttClient.setUsernamePassword(mqttUser, mqttPass);
   }
 
-  if (!mqttClient.connect(broker, port)) {
+  const char* mqttBroker = settings[JSON_KEY_MQTT_BROKER];
+  int mqttPort = settings[JSON_KEY_MQTT_PORT];
+  int tries = 0;
+
+  while (!mqttClient.connect(mqttBroker, mqttPort) && tries < MQTT_MAX_TRIES) {
     delay(SETUP_DELAY);
-    while (1);
+    tries += 1;
+  }
+
+  if(!mqttClient.connected() || tries > MQTT_MAX_TRIES) {
+    ESP.reset();
   }
 }
 
@@ -45,7 +48,7 @@ void handleMQTT() {
   float h = dht.readHumidity();
   float t = dht.readTemperature();
 
-  sendMqttMessage(buildTopic(tempTopic), String(t));
-  sendMqttMessage(buildTopic(humidityTopic), String(h));
+  sendMqttMessage(buildTopic(TOPIC_TEMPERATURE), String(t));
+  sendMqttMessage(buildTopic(TOPIC_HUMIDITY), String(h));
   delay(LOOP_DELAY);
 }

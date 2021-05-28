@@ -1,27 +1,27 @@
 #include "rest.h"
-#include "secrets.h"
 #include "sensor_dht.h"
-#include "server_config.h"
+#include "constants.h"
+#include "utils.h"
 #include <ArduinoJson.h>
 #include <ESP8266WebServer.h>
 #include <ESP8266WiFi.h>
 #include <string.h>
 
-ESP8266WebServer server(80);
-
-char server_user[] = SECRET_SERVER_USERNAME;
-char server_pass[] = SECRET_SERVER_PASSWORD;
+ESP8266WebServer restServer(80);
 
 String version = VERSION;
 
 // HTTP Server Methods
 void handleServer() {
-  server.handleClient();  
+  restServer.handleClient();  
 }
 
 void checkAuth() {
-  if (!server.authenticate(server_user, server_pass)) {
-        return server.requestAuthentication();
+  DynamicJsonDocument settings = loadConfig();
+  const char* serverUser = settings[JSON_KEY_REST_USER];
+  const char* serverPass = settings[JSON_KEY_REST_PASS];
+  if (!restServer.authenticate(serverUser, serverPass)) {
+        return restServer.requestAuthentication();
   }
 }
 
@@ -29,69 +29,65 @@ void sendJSONResponse(DynamicJsonDocument doc) {
   String response = "";
   serializeJson(doc, response);
 
-  server.send(200, "application/json", response);
+  restServer.send(HTTP_OK, HTTP_TYPE_JSON, response);
 }
 
-void handleReadAll()
-{
+void handleReadAll() {
   checkAuth();
 
-  DynamicJsonDocument doc(1024);
+  DynamicJsonDocument doc(DOC_SIZE);
 
   float humidity = dht.readHumidity();
   float temperature = dht.readTemperature();
 
-  doc["temperature"] = temperature;
-  doc["humidity"] = humidity;
-  doc["identifier"] = WiFi.macAddress();
+  doc[JSON_KEY_TEMPERATURE] = temperature;
+  doc[JSON_KEY_HUMIDITY] = humidity;
+  doc[JSON_KEY_IDENTIFIER] = WiFi.macAddress();
 
   sendJSONResponse(doc);
 }
 
-void handleReadTemperature()
-{
+void handleReadTemperature() {
   checkAuth();
 
-  DynamicJsonDocument doc(1024);
+  DynamicJsonDocument doc(DOC_SIZE);
 
   float temperature = dht.readTemperature();
 
-  doc["temperature"] = temperature;
-  doc["identifier"] = WiFi.macAddress();
+  doc[JSON_KEY_TEMPERATURE] = temperature;
+  doc[JSON_KEY_IDENTIFIER] = WiFi.macAddress();
 
   sendJSONResponse(doc);
 }
 
-void handleReadHumidity()
-{
+void handleReadHumidity() {
   checkAuth();
 
-  DynamicJsonDocument doc(1024);
+  DynamicJsonDocument doc(DOC_SIZE);
 
   float humidity = dht.readHumidity();
 
-  doc["humidity"] = humidity;
-  doc["identifier"] = WiFi.macAddress();
+  doc[JSON_KEY_HUMIDITY] = humidity;
+  doc[JSON_KEY_IDENTIFIER] = WiFi.macAddress();
 
   sendJSONResponse(doc);
 }
 
-void handleGetInfo()
-{
+void handleGetInfo() {
   checkAuth();
 
-  DynamicJsonDocument doc(1024);
+  DynamicJsonDocument doc(DOC_SIZE);
 
-  doc["identifier"] = WiFi.macAddress();
-  doc["version"] = version;
+  doc[JSON_KEY_IDENTIFIER] = WiFi.macAddress();
+  doc[JSON_KEY_VERSION] = version;
 
   sendJSONResponse(doc);
 }
 
 void handleServerSetup() {
-  server.on("/api/read/all/", handleReadAll);
-  server.on("/api/read/temperature/", handleReadTemperature);
-  server.on("/api/read/humidity/", handleReadHumidity);
-  server.on("/api/info/", handleGetInfo);
-  server.begin();
+  restServer.on(ENDPOINT_READ_ALL, handleReadAll);
+  restServer.on(ENDPOINT_READ_TEMPERATURE, handleReadTemperature);
+  restServer.on(ENDPOINT_READ_HUMIDITY, handleReadHumidity);
+  restServer.on(ENDPOINT_INFO, handleGetInfo);
+  restServer.begin();
 }

@@ -1,4 +1,4 @@
 #include "sensor_dht.h"
-#include "server_config.h"
+#include "constants.h"
 
 DHT dht(DHT_PIN, DHT_TYPE);
