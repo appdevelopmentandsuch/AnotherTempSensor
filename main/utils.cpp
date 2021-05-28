@@ -5,13 +5,29 @@
 #include <StreamUtils.h>
 #include <string.h>
 
-DynamicJsonDocument settings(DOC_SIZE);
-char defaultConfig[] = "{\n\t\"ssid\": \"\",\n\t\"pass\": \"\",\n\t\"mqttBroker\": \"\",\n\t\"mqttPort\": 1883,\n\t\"mqttUser\":\"\",\n\t\"mqttPass\":\"\",\n\t\"restUser\":\"\",\n\t\"restPass\":\"\",\n\t\"service\": 0\n}";
+bool sameConfig(DynamicJsonDocument doc1, DynamicJsonDocument doc2) {
+  bool same = true;
+  String serializedDoc1;
+  String serializedDoc2;
+
+  serializeJson(doc1, serializedDoc1);
+  serializeJson(doc2, serializedDoc2);
+
+  return serializedDoc1.equals(serializedDoc2);
+}
 
 bool setDefaultServerConfig() {
   DynamicJsonDocument doc(DOC_SIZE);
+  char defaultConfig[] = "{\n\t\"ssid\": \"\",\n\t\"pass\": \"\",\n\t\"mqttBroker\": \"\",\n\t\"mqttPort\": 1883,\n\t\"mqttUser\":\"\",\n\t\"mqttPass\":\"\",\n\t\"restUser\":\"\",\n\t\"restPass\":\"\",\n\t\"service\": 0\n}";
   
   deserializeJson(doc, defaultConfig);
+
+  DynamicJsonDocument curSettings = loadConfig();
+
+  bool alreadyDefault = sameConfig(doc, curSettings);
+  if(alreadyDefault) {
+    return alreadyDefault;
+  }
 
   return storeConfig(doc);
 }

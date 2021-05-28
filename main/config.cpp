@@ -1,5 +1,4 @@
 #include "config.h"
-#include "http.h"
 #include "constants.h"
 #include "utils.h"
 #include "wifi.h"
@@ -57,10 +56,6 @@ ICACHE_RAM_ATTR void resetConfig() {
             delay(100);
         }
 
-        while(!WiFi.softAPdisconnect(true)) {
-            delay(100);
-        }
-
         detachInterrupt(digitalPinToInterrupt(BUTTON_INPUT));
 
         ESP.reset();
@@ -93,7 +88,8 @@ void handleConfig() {
         } else {
             bool stored = storeConfig(doc);
             if(stored) {
-                configServer.send(HTTP_OK, HTTP_TYPE_JSON, HTTP_SUCCESS);
+                String response = String("{\n\t\"success\":true,\n\t\"identifier\":\"") + WiFi.macAddress() + String("\"}");
+                configServer.send(HTTP_OK, HTTP_TYPE_JSON, response);
                 
                 delay(SEND_DELAY); //Adding slight delay in order to send the response
                 

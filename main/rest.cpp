@@ -1,4 +1,3 @@
-#include "http.h"
 #include "rest.h"
 #include "sensor_dht.h"
 #include "constants.h"
@@ -18,6 +17,7 @@ void handleServer() {
 }
 
 void checkAuth() {
+  DynamicJsonDocument settings = loadConfig();
   const char* serverUser = settings[JSON_KEY_REST_USER];
   const char* serverPass = settings[JSON_KEY_REST_PASS];
   if (!restServer.authenticate(serverUser, serverPass)) {

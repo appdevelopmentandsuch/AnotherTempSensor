@@ -17,6 +17,7 @@ void handleNoWifi() {
 }
 
 void handleWifiSetup() {
+  DynamicJsonDocument settings = loadConfig();
   const char* ssid = settings[JSON_KEY_WIFI_SSID]; 
   const char* pass = settings[JSON_KEY_WIFI_PASS]; 
 
@@ -29,12 +30,12 @@ void handleWifiSetup() {
     WiFi.begin(ssid, pass);
 
     uint tries = 0;
-      while (!isConnected() && tries < 10) {
+      while (!isConnected() && tries < WIFI_MAX_TRIES) {
         delay(SETUP_DELAY);
         tries += 1;
       }
 
-    if(isConnected() && tries < 10) {
+    if(isConnected() && tries < WIFI_MAX_TRIES) {
       Serial.println("WiFi connected.");
       Serial.print("Got IP: ");  Serial.println(WiFi.localIP());
       int serviceConfig = settings[JSON_KEY_SERVICE_CONFIG];

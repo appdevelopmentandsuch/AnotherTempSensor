@@ -15,16 +15,15 @@ void setup() {
   dht.begin();
   EEPROM.begin(DOC_SIZE);
 
-  pinMode(BUTTON_INPUT, INPUT);
+  handleWifiSetup();
 
-  settings = loadConfig();
+  DynamicJsonDocument settings = loadConfig();
 
   serviceConfig = settings[JSON_KEY_SERVICE_CONFIG];
 
-  handleWifiSetup();
-
   setupConfig[serviceConfig].func();
 
+  pinMode(BUTTON_INPUT, INPUT);
   attachInterrupt(digitalPinToInterrupt(BUTTON_INPUT), resetConfig, RISING);
 }
 

@@ -12,6 +12,9 @@
 #define WIFI_CHANNEL 9
 #define WIFI_VISIBLE 0
 #define WIFI_MAX_CONNECTIONS 1
+#define WIFI_MAX_TRIES 20
+
+#define MQTT_MAX_TRIES 20
 
 #define BUTTON_INPUT 0
 
@@ -22,6 +25,9 @@
 #define ADDRESS_CONFIG 0
 
 #define DOC_SIZE 1024
+
+#define TOPIC_HUMIDITY "humidity"
+#define TOPIC_TEMPERATURE "temperature"
 
 #define DEFAULT_DEVICE_SSID "AnotherTempSensor"
 #define DEFAULT_DEVICE_PASS "password"
@@ -47,5 +53,19 @@
 #define ENDPOINT_INFO "/api/info/"
 
 #define ENDPOINT_CONFIG "/api/config/"
+
+#define HTTP_OK 200
+#define HTTP_BAD_REQUEST 400
+
+#define HTTP_TYPE_JSON "text/json"
+
+#define HTTP_MISSING_JSON_BODY "{\n\t\"error\":\"JSON body missing\"}"
+#define HTTP_BAD_SERVICE "{\n\t\"error\":\"Invalid service, select 1 for REST or 2 for MQTT.\"}"
+#define HTTP_BAD_WIFI_CONFIG "{\n\t\"error\":\"Missing a wifi configuration, please add one.\"}"
+#define HTTP_BAD_REST_CONFIG "{\n\t\"error\":\"Invalid REST config, double check the config and try again.\"}"
+#define HTTP_BAD_MQTT_CONFIG "{\n\t\"error\":\"Invalid MQTT config, double check the config and try again.\"}"
+#define HTTP_ERROR_PARSING_BODY "{\n\t\"error\":\"Unable to parse config.\"}"
+#define HTTP_ERROR_UNABLE_TO_STORE_CONFIG "{\n\t\"error\":\"Unable to store config.\"}"
+
 
 #endif

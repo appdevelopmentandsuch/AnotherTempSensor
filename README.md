@@ -29,17 +29,83 @@ ArduinoMQTTClient Version 0.1.5
 DHT sensor library Version 1.4.1
 ```
 
-4. Copy `sample.secrets.h`, rename it to `secrets.h` and populate it with Wifi credentials, and either MQTT creds or REST API credentials.
+4. Navigate to `Tools -> Boards -> ESP8266 Boards` and select `NodeMCU 1.0 (ESP-12 Module)`.
 
-5. Navigate to `Tools -> Boards -> ESP8266 Boards` and select `NodeMCU 1.0 (ESP-12 Module)`.
+5. Plug your board into your computer and select the appropriate `Port` in `Tools -> Port`, for example mine was `/dev/ttyUSB0`.
 
-6. Plug your board into your computer and select the appropriate `Port` in `Tools -> Port`, for example mine was `/dev/ttyUSB0`.
+6. You can either `Verify` the sketch, to see if everything compiles without error, or you can `Upload` the sketch, which will compile it anyway and warn you of any issues then.
 
-7. You can either `Verify` the sketch, to see if everything compiles without error, or you can `Upload` the sketch, which will compile it anyway and warn you of any issues then.
-
-8. (Debugging) Open the `Serial Monitor` to `115200`, and you should be able to tell if your device connects to Wifi, and if so, what its IP address is.
+7. (Debugging) Open the `Serial Monitor` to `115200`, and you should be able to tell if your device connects to Wifi, and if so, what its IP address is.
 
 ## Usage
+
+### Configuration
+
+AnotherTempSensor is designed to be easy to setup and use. Without any prior configuration, you should be able to flash a device and use immediately.
+
+Once flashed, using a computer with Postman, open up your WiFi settings and find the network `AnotherTempSensor` which you can login to using the **password** `password`.
+
+Once logged in, in Postman, configure and send the following:
+
+**POST** `http://192.168.4.1/api/config/`
+
+```bash
+Raw JSON Body
+{
+    "ssid": "", //WiFi SSID to connect to
+    "pass": "", //WiFi Password for connection
+    "mqttBroker": "", //The IP address or hostname for an MQTT broker
+    "mqttPort": 1883, //The port number of the MQTT broker
+    "mqttUser":"", //A username for a valid MQTT user
+    "mqttPass":"", //The password for the valid MQTT user
+    "restUser":"", //The username you wish to use going forward to make authenticated requests to the device
+    "restPass":"", //The password you wish to use going forward to make authenticated requests to the device
+    "service": 1 //1 for REST, 2 for MQTT
+}
+```
+
+Also valid ways to send configurations:
+
+**POST** `http://192.168.4.1/api/config/`
+
+```bash
+Raw JSON Body
+{
+    "ssid": ""
+    "pass": ""
+    "restUser":"",
+    "restPass":"",
+    "service": 1
+}
+```
+
+**POST** `http://192.168.4.1/api/config/`
+
+```bash
+Raw JSON Body
+{
+    "ssid": "",
+    "pass": "",
+    "mqttBroker": "",
+    "mqttPort": 1883,
+    "mqttUser":"",
+    "mqttPass":"",
+    "service": 2
+}
+```
+
+If your device received and processed your configuration, you should receive a response like this:
+
+```bash
+{
+    "success": true,
+    "identifier": "##:##:##:##:##:##"
+}
+```
+
+Otherwise, you will receive one of a possible few messages, indicating what corrections should be made.
+
+The device will automatically reboot and attempt to connect to WiFi using the `ssid` and `pass` you provided. If it is unable to connect for whatever reason, it will revert to the configure stage again and you will be able to again attempt to configure the endpoint.
 
 ### REST API
 
@@ -55,7 +121,7 @@ You should be able to query the API by opening an API application such as Postma
 
 #### Documentation
 
-**GET** `/api/read/all/`
+**GET** `http://[device_ip]/api/read/all/`
 
 ```bash
 {
@@ -65,7 +131,7 @@ You should be able to query the API by opening an API application such as Postma
 }
 ```
 
-**GET** `/api/read/temperature/`
+**GET** `http://[device_ip]/api/read/temperature/`
 
 ```bash
 {
@@ -74,7 +140,7 @@ You should be able to query the API by opening an API application such as Postma
 }
 ```
 
-**GET** `/api/read/humidity/`
+**GET** `http://[device_ip]/api/read/humidity/`
 
 ```bash
 {
@@ -83,7 +149,7 @@ You should be able to query the API by opening an API application such as Postma
 }
 ```
 
-**GET** `/api/info/`
+**GET** `http://[device_ip]/api/info/`
 
 ```bash
 {
