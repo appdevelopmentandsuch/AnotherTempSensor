@@ -45,7 +45,7 @@ AnotherTempSensor is designed to be easy to setup and use. Without any prior con
 
 Once flashed, using a computer with Postman, open up your WiFi settings and find the network `AnotherTempSensor` which you can login to using the **password** `password`.
 
-Once logged in, in Postman, configure and send the following:
+Once connected to the network `AnotherTempSensor`, in Postman, configure the below JSON body and send:
 
 **POST** `http://192.168.4.1/api/config/`
 
@@ -64,11 +64,12 @@ Raw JSON Body
 }
 ```
 
-Also valid ways to send configurations:
+Also valid ways to configure:
 
 **POST** `http://192.168.4.1/api/config/`
 
 ```bash
+// REST Configuration
 Raw JSON Body
 {
     "ssid": ""
@@ -82,6 +83,7 @@ Raw JSON Body
 **POST** `http://192.168.4.1/api/config/`
 
 ```bash
+// MQTT Configuration
 Raw JSON Body
 {
     "ssid": "",
@@ -97,6 +99,7 @@ Raw JSON Body
 If your device received and processed your configuration, you should receive a response like this:
 
 ```bash
+// Device Response
 {
     "success": true,
     "identifier": "##:##:##:##:##:##"
@@ -113,7 +116,7 @@ To clear any previous configuration and restore the default one, press the `Flas
 
 ### REST API
 
-You should be able to query the API by opening an API application such as Postman, setting `Authentication` to `Basic Auth`, setting `Username` and `Password` to what you set `SECRET_SERVER_USERNAME` and `SECRET_SERVER_PASSWORD` to, and setting the URL to one of the possible endpoints, i.e. `http://[device_ip]/api/read/all/`, and getting a result back, i.e.
+You should be able to query the API by opening an API application such as Postman, setting `Authentication` to `Basic Auth`, setting `Username` and `Password` to what you set `restUser` and `restPass` to, and setting the URL to one of the possible endpoints, i.e. `http://[device_ip]/api/read/all/`, and getting a result back, i.e.
 
 ```bash
 {
