@@ -107,6 +107,10 @@ Otherwise, you will receive one of a possible few messages, indicating what corr
 
 The device will automatically reboot and attempt to connect to WiFi using the `ssid` and `pass` you provided. If it is unable to connect for whatever reason, it will revert to the configure stage again and you will be able to again attempt to configure the endpoint.
 
+#### Reset Device
+
+To clear any previous configuration and restore the default one, press the `Flash` button on your device.
+
 ### REST API
 
 You should be able to query the API by opening an API application such as Postman, setting `Authentication` to `Basic Auth`, setting `Username` and `Password` to what you set `SECRET_SERVER_USERNAME` and `SECRET_SERVER_PASSWORD` to, and setting the URL to one of the possible endpoints, i.e. `http://[device_ip]/api/read/all/`, and getting a result back, i.e.
