@@ -13,7 +13,7 @@ Temperature / Humidity Logger using NodeMCU, DHT11, sending data either using MQ
 
 ## Wiring
 
-<img src="https://user-images.githubusercontent.com/22528729/118985613-356a3680-b944-11eb-891d-28da8cf00c29.png" alt="Wiring" width="200"/>
+<img src="https://user-images.githubusercontent.com/22528729/120116063-f316d580-c14b-11eb-9123-5dba09db7a37.png" alt="Wiring" width="200"/>
 
 ## Quick Start
 
