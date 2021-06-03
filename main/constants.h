@@ -9,9 +9,9 @@
 #define DHT_PIN D5
 #define DHT_TYPE DHT11
 
-#define SETUP_DELAY 500
-#define SEND_DELAY 500
-#define DISCONNECT_DELAY 100
+#define DELAY_SETUP 500
+#define DELAY_SEND 500
+#define DELAY_DISCONNECT 100
 
 #define WEB_SERVER_PORT 80
 

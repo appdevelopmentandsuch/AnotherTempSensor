@@ -62,7 +62,7 @@ ICACHE_RAM_ATTR void resetConfig() {
 
     if(stored) {
         while(!WiFi.disconnect()) {
-            delay(DISCONNECT_DELAY);
+            delay(DELAY_DISCONNECT);
         }
 
         detachInterrupt(digitalPinToInterrupt(BUTTON_INPUT));
@@ -100,15 +100,15 @@ void handleConfig() {
                 String response = String("{\n\t\"success\":true,\n\t\"identifier\":\"") + WiFi.macAddress() + String("\"}");
                 configServer.send(HTTP_OK, HTTP_TYPE_JSON, response);
                 
-                delay(SEND_DELAY); //Adding slight delay in order to send the response
+                delay(DELAY_SEND); //Adding slight delay in order to send the response
                 
                 configServer.close();
                 while(!WiFi.disconnect()) {
-                    delay(DISCONNECT_DELAY);
+                    delay(DELAY_DISCONNECT);
                 }
 
                 while(!WiFi.softAPdisconnect(true)) {
-                    delay(DISCONNECT_DELAY);
+                    delay(DELAY_DISCONNECT);
                 }
 
                 detachInterrupt(digitalPinToInterrupt(BUTTON_INPUT));

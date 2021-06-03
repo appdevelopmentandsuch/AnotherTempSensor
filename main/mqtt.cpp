@@ -24,7 +24,7 @@ void handleMQTTSetup() {
   int tries = 0;
 
   while (!mqttClient.connect(mqttBroker, mqttPort) && tries < MQTT_MAX_TRIES) {
-    delay(SETUP_DELAY);
+    delay(DELAY_SETUP);
     tries += 1;
   }
 
