@@ -43,6 +43,8 @@ DHT sensor library Version 1.4.1
 
 AnotherTempSensor is designed to be easy to setup and use. Without any prior configuration, you should be able to flash a device and use immediately.
 
+**NOTE** By default, AnotherTempSensor does not display verbose output to the Serial Monitor for security purposes. If you wish to see verbose output of the device, you must got into `constants.h` and change `DEBUG` to `true`.
+
 Once flashed, using a computer with Postman, open up your WiFi settings and find the network `AnotherTempSensor` which you can login to using the **password** `password`.
 
 Once connected to the network `AnotherTempSensor`, in Postman, configure the below JSON body and send:

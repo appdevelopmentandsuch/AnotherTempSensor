@@ -2,7 +2,7 @@
 #define CONSTANTS_H
 #include <string.h>
 
-#define DEBUG true
+#define DEBUG false
 
 #define SERIAL_FREQUENCY 115200
 
