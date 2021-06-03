@@ -2,11 +2,19 @@
 #define CONSTANTS_H
 #include <string.h>
 
+#define DEBUG false
+
+#define SERIAL_FREQUENCY 115200
+
 #define DHT_PIN D5
 #define DHT_TYPE DHT11
-#define LOOP_DELAY 5000
-#define SETUP_DELAY 500
-#define SEND_DELAY 500
+
+#define DELAY_SETUP 500
+#define DELAY_SEND 500
+#define DELAY_DISCONNECT 100
+
+#define WEB_SERVER_PORT 80
+
 #define VERSION "1.0.0"
 
 #define WIFI_CHANNEL 9
@@ -14,6 +22,7 @@
 #define WIFI_MAX_CONNECTIONS 1
 #define WIFI_MAX_TRIES 20
 
+#define MQTT_MIN_UPDATE_INTERVAL 500
 #define MQTT_MAX_TRIES 20
 
 #define BUTTON_INPUT 0
@@ -37,6 +46,7 @@
 #define JSON_KEY_SERVICE_CONFIG "service"
 #define JSON_KEY_MQTT_BROKER "mqttBroker"
 #define JSON_KEY_MQTT_PORT "mqttPort"
+#define JSON_KEY_MQTT_UPDATE_INTERVAL "mqttUpdateInterval"
 #define JSON_KEY_MQTT_USER "mqttUser"
 #define JSON_KEY_MQTT_PASS "mqttPass"
 #define JSON_KEY_REST_USER "restUser"
@@ -66,6 +76,5 @@
 #define HTTP_BAD_MQTT_CONFIG "{\n\t\"error\":\"Invalid MQTT config, double check the config and try again.\"}"
 #define HTTP_ERROR_PARSING_BODY "{\n\t\"error\":\"Unable to parse config.\"}"
 #define HTTP_ERROR_UNABLE_TO_STORE_CONFIG "{\n\t\"error\":\"Unable to store config.\"}"
-
 
 #endif

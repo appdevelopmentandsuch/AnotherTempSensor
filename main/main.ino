@@ -11,7 +11,10 @@
 int serviceConfig = OPTION_CONFIG;
 
 void setup() {
-  Serial.begin(115200);
+  if(DEBUG) {
+    Serial.begin(SERIAL_FREQUENCY);
+  }
+  
   dht.begin();
   EEPROM.begin(DOC_SIZE);
 
