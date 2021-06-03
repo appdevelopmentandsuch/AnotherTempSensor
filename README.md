@@ -56,6 +56,7 @@ Raw JSON Body
     "pass": "", //WiFi Password for connection
     "mqttBroker": "", //The IP address or hostname for an MQTT broker
     "mqttPort": 1883, //The port number of the MQTT broker
+    "mqttUpdateInterval": 5000, //The interval in which you would like the device to publish data to the MQTT broker, in milliseconds, minimum is 500 or 0.5 seconds
     "mqttUser":"", //A username for a valid MQTT user
     "mqttPass":"", //The password for the valid MQTT user
     "restUser":"", //The username you wish to use going forward to make authenticated requests to the device
@@ -90,6 +91,7 @@ Raw JSON Body
     "pass": "",
     "mqttBroker": "",
     "mqttPort": 1883,
+    "mqttUpdateInterval": 5000,
     "mqttUser":"",
     "mqttPass":"",
     "service": 2
