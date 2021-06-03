@@ -38,7 +38,7 @@ bool validRESTConfig(DynamicJsonDocument doc) {
 bool validMQTTUpdateInterval(DynamicJsonDocument doc) {
     if(doc.containsKey(JSON_KEY_MQTT_UPDATE_INTERVAL)) {
         int mqttUpdateInterval = doc[JSON_KEY_MQTT_UPDATE_INTERVAL];
-        return mqttUpdateInterval >= MIN_MQTT_UPDATE_INTERVAL;
+        return mqttUpdateInterval >= MQTT_MIN_UPDATE_INTERVAL;
     }
     return false;
 }

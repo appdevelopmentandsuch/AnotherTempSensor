@@ -22,7 +22,7 @@
 #define WIFI_MAX_CONNECTIONS 1
 #define WIFI_MAX_TRIES 20
 
-#define MIN_MQTT_UPDATE_INTERVAL 500
+#define MQTT_MIN_UPDATE_INTERVAL 500
 #define MQTT_MAX_TRIES 20
 
 #define BUTTON_INPUT 0
@@ -76,6 +76,5 @@
 #define HTTP_BAD_MQTT_CONFIG "{\n\t\"error\":\"Invalid MQTT config, double check the config and try again.\"}"
 #define HTTP_ERROR_PARSING_BODY "{\n\t\"error\":\"Unable to parse config.\"}"
 #define HTTP_ERROR_UNABLE_TO_STORE_CONFIG "{\n\t\"error\":\"Unable to store config.\"}"
-
 
 #endif
