@@ -11,7 +11,7 @@ bool isConnected() {
 }
 
 void handleNoWifi() {
-  Serial.println("Unable to connect to Wifi, starting device Wifi...");
+  printlnMessage("Unable to connect to Wifi, starting device Wifi...");
   setDefaultConfig();
   WiFi.softAP(DEFAULT_DEVICE_SSID, DEFAULT_DEVICE_PASS, WIFI_CHANNEL, WIFI_VISIBLE, WIFI_MAX_CONNECTIONS);
 }
@@ -26,7 +26,7 @@ void handleWifiSetup() {
   }
 
   if(ssid != "" && pass != "") {
-    Serial.print("Connecting with ssid: \""); Serial.print(ssid); Serial.print("\" and pass: \""); Serial.print(pass); Serial.println("\"");
+    printMessage("Connecting with ssid: \""); printMessage(ssid); printMessage("\" and pass: \""); printMessage(pass); printlnMessage("\"");
     WiFi.begin(ssid, pass);
 
     uint tries = 0;
@@ -36,8 +36,8 @@ void handleWifiSetup() {
       }
 
     if(isConnected() && tries < WIFI_MAX_TRIES) {
-      Serial.println("WiFi connected.");
-      Serial.print("Got IP: ");  Serial.println(WiFi.localIP());
+      printlnMessage("WiFi connected.");
+      printMessage("Got IP: ");  printlnMessage(WiFi.localIP().toString());
       int serviceConfig = settings[JSON_KEY_SERVICE_CONFIG];
       if(serviceConfig > OPTION_MQTT || serviceConfig < OPTION_REST) {
         settings[JSON_KEY_SERVICE_CONFIG] = OPTION_CONFIG;

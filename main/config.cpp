@@ -5,7 +5,7 @@
 #include <ArduinoJson.h>
 #include <ESP8266WebServer.h>
 
-ESP8266WebServer configServer(80);
+ESP8266WebServer configServer(WEB_SERVER_PORT);
 
 bool validExpectedService(DynamicJsonDocument doc, int service) {
     if (doc.containsKey(JSON_KEY_SERVICE_CONFIG)) {
@@ -35,11 +35,20 @@ bool validRESTConfig(DynamicJsonDocument doc) {
         validExpectedService(doc, OPTION_REST);
 }
 
+bool validMQTTUpdateInterval(DynamicJsonDocument doc) {
+    if(doc.containsKey(JSON_KEY_MQTT_UPDATE_INTERVAL)) {
+        int mqttUpdateInterval = doc[JSON_KEY_MQTT_UPDATE_INTERVAL];
+        return mqttUpdateInterval >= MIN_MQTT_UPDATE_INTERVAL;
+    }
+    return false;
+}
+
 bool validMQTTConfig(DynamicJsonDocument doc) {
     return doc.containsKey(JSON_KEY_MQTT_BROKER) &&
         doc.containsKey(JSON_KEY_MQTT_PORT) &&
         doc.containsKey(JSON_KEY_MQTT_USER) &&
         doc.containsKey(JSON_KEY_MQTT_PASS) &&
+        validMQTTUpdateInterval(doc) &&
         validExpectedService(doc, OPTION_MQTT);
 }
 
@@ -48,12 +57,12 @@ bool setDefaultConfig() {
 }
 
 ICACHE_RAM_ATTR void resetConfig() {
-    Serial.println("Resetting");
+    printlnMessage("Resetting");
     bool stored = setDefaultConfig();
 
     if(stored) {
         while(!WiFi.disconnect()) {
-            delay(100);
+            delay(DISCONNECT_DELAY);
         }
 
         detachInterrupt(digitalPinToInterrupt(BUTTON_INPUT));
@@ -95,11 +104,11 @@ void handleConfig() {
                 
                 configServer.close();
                 while(!WiFi.disconnect()) {
-                    delay(100);
+                    delay(DISCONNECT_DELAY);
                 }
 
                 while(!WiFi.softAPdisconnect(true)) {
-                    delay(100);
+                    delay(DISCONNECT_DELAY);
                 }
 
                 detachInterrupt(digitalPinToInterrupt(BUTTON_INPUT));

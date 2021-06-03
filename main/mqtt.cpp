@@ -45,10 +45,13 @@ void sendMqttMessage(String topic, String message) {
 
 void handleMQTT() {
   mqttClient.poll();
-  float h = dht.readHumidity();
-  float t = dht.readTemperature();
+  float humidity = dht.readHumidity();
+  float temperature = dht.readTemperature();
 
-  sendMqttMessage(buildTopic(TOPIC_TEMPERATURE), String(t));
-  sendMqttMessage(buildTopic(TOPIC_HUMIDITY), String(h));
-  delay(LOOP_DELAY);
+  sendMqttMessage(buildTopic(TOPIC_TEMPERATURE), String(temperature));
+  sendMqttMessage(buildTopic(TOPIC_HUMIDITY), String(humidity));
+  
+  DynamicJsonDocument settings = loadConfig();
+  int mqttUpdateInterval = settings[JSON_KEY_MQTT_UPDATE_INTERVAL];
+  delay(mqttUpdateInterval);
 }
