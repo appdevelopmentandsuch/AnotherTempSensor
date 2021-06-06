@@ -45,8 +45,8 @@ void sendMqttMessage(String topic, String message) {
 
 void handleMQTT() {
   mqttClient.poll();
-  float humidity = dht.readHumidity();
-  float temperature = dht.readTemperature();
+  float humidity = readHumidity();
+  float temperature = readTemperature();
 
   sendMqttMessage(buildTopic(TOPIC_TEMPERATURE), String(temperature));
   sendMqttMessage(buildTopic(TOPIC_HUMIDITY), String(humidity));

@@ -37,8 +37,8 @@ void handleReadAll() {
 
   DynamicJsonDocument doc(DOC_SIZE);
 
-  float humidity = dht.readHumidity();
-  float temperature = dht.readTemperature();
+  float humidity = readHumidity();
+  float temperature = readTemperature();
 
   doc[JSON_KEY_TEMPERATURE] = temperature;
   doc[JSON_KEY_HUMIDITY] = humidity;
@@ -52,7 +52,7 @@ void handleReadTemperature() {
 
   DynamicJsonDocument doc(DOC_SIZE);
 
-  float temperature = dht.readTemperature();
+  float temperature = readTemperature();
 
   doc[JSON_KEY_TEMPERATURE] = temperature;
   doc[JSON_KEY_IDENTIFIER] = WiFi.macAddress();
@@ -65,7 +65,7 @@ void handleReadHumidity() {
 
   DynamicJsonDocument doc(DOC_SIZE);
 
-  float humidity = dht.readHumidity();
+  float humidity = readHumidity();
 
   doc[JSON_KEY_HUMIDITY] = humidity;
   doc[JSON_KEY_IDENTIFIER] = WiFi.macAddress();
