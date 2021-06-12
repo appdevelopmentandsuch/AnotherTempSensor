@@ -14,8 +14,9 @@ void setup() {
   if(DEBUG) {
     Serial.begin(SERIAL_FREQUENCY);
   }
-  
+
   dht.begin();
+  
   EEPROM.begin(DOC_SIZE);
 
   handleWifiSetup();

@@ -9,7 +9,7 @@
 #define DHT_PIN D5
 #define DHT_TYPE DHT11
 
-#define BAD_READ -1
+#define BAD_READ -999
 
 #define DELAY_SETUP 500
 #define DELAY_SEND 500
@@ -26,6 +26,8 @@
 
 #define MQTT_MIN_UPDATE_INTERVAL 500
 #define MQTT_MAX_TRIES 20
+
+#define READ_MAX_TRIES 20
 
 #define BUTTON_INPUT 0
 

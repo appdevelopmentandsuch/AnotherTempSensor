@@ -3,21 +3,32 @@
 #include "DHT.h"
 #include <Arduino.h>
 
+DHT dht(DHT_PIN, DHT_TYPE);
+
 float readTemperature() {
-    DHT dht(DHT_PIN, DHT_TYPE);
-    dht.begin();
+    int tries = 0;
     float temperature = dht.readTemperature();
-    if(isnan(temperature)) {
+    while(isnan(temperature) && tries < READ_MAX_TRIES) {
+        temperature = dht.readTemperature();
+        tries += 1;
+    }
+
+    if(isnan(temperature) || tries >= READ_MAX_TRIES) {
         return BAD_READ;
     }
+
     return temperature;
 }
 
 float readHumidity() {
-    DHT dht(DHT_PIN, DHT_TYPE);
-    dht.begin();
+    int tries = 0;
     float humidity = dht.readHumidity();
-    if(isnan(humidity)) {
+    while(isnan(humidity) && tries < READ_MAX_TRIES) {
+        humidity = dht.readHumidity();
+        tries += 1;
+    }
+
+    if(isnan(humidity) || tries >= READ_MAX_TRIES) {
         return BAD_READ;
     }
     return humidity;
