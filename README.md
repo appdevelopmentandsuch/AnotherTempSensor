@@ -1,6 +1,14 @@
 # AnotherTempSensor
 
 [![CodeFactor](https://www.codefactor.io/repository/github/appdevelopmentandsuch/anothertempsensor/badge)](https://www.codefactor.io/repository/github/appdevelopmentandsuch/anothertempsensor)
+[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/appdevelopmentandsuch/AnotherTempSensor/graphs/commit-activity)
+[![GitHub license](https://img.shields.io/github/license/appdevelopmentandsuch/AnotherTempSensor.svg)](https://github.com/appdevelopmentandsuch/AnotherTempSensor/blob/master/LICENSE)
+[![GitHub release](https://img.shields.io/github/release/appdevelopmentandsuch/AnotherTempSensor.svg)](https://GitHub.com/appdevelopmentandsuch/AnotherTempSensor/releases/)
+[![GitHub tag](https://img.shields.io/github/tag/appdevelopmentandsuch/AnotherTempSensor.svg)](https://GitHub.com/appdevelopmentandsuch/AnotherTempSensor/tags/)
+[![Github all releases](https://img.shields.io/github/downloads/appdevelopmentandsuch/AnotherTempSensor/total.svg)](https://GitHub.com/appdevelopmentandsuch/AnotherTempSensor/releases/)
+[![GitHub stars](https://img.shields.io/github/stars/appdevelopmentandsuch/AnotherTempSensor.svg?style=social&label=Star&maxAge=2592000)](https://GitHub.com/appdevelopmentandsuch/AnotherTempSensor/stargazers/)
+[![GitHub issues](https://img.shields.io/github/issues/appdevelopmentandsuch/AnotherTempSensor.svg)](https://GitHub.com/appdevelopmentandsuch/AnotherTempSensor/issues/)
+[![GitHub issues-closed](https://img.shields.io/github/issues-closed/appdevelopmentandsuch/AnotherTempSensor.svg)](https://GitHub.com/appdevelopmentandsuch/AnotherTempSensor/issues?q=is%3Aissue+is%3Aclosed)
 
 Temperature / Humidity Logger using NodeMCU, DHT11, sending data either using MQTT, or pulling directly from device's REST API
 
